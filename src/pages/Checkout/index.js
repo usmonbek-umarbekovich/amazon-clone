@@ -1,7 +1,7 @@
-import { useStateValue } from './StateProvider';
-import Subtotal from './Subtotal';
-import CheckoutProduct from './CheckoutProduct';
-import './Checkout.css';
+import { useStateValue } from '../../contexts/StateProvider';
+import Subtotal from '../../components/Subtotal';
+import CheckoutProduct from '../../components/CheckoutProduct';
+import './style.css';
 
 function Checkout() {
   const [{ basket }, dispatch] = useStateValue();

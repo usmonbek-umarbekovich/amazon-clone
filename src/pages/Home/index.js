@@ -1,5 +1,5 @@
-import Product from './Product';
-import './Home.css';
+import Product from '../../components/Product';
+import './style.css';
 
 function Home() {
   return (

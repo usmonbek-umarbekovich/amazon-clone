@@ -1,5 +1,5 @@
-import { useStateValue } from './StateProvider';
-import './CheckoutProduct.css';
+import { useStateValue } from '../../contexts/StateProvider';
+import './style.css';
 
 function CheckoutProduct({ id, index, image, title, price, rating }) {
   const [{ basket }, dispatch] = useStateValue();

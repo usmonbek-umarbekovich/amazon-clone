@@ -1,7 +1,7 @@
 import CurrencyFormat from 'react-currency-format';
-import { useStateValue } from './StateProvider';
-import { getBasketTotal } from './reducer';
-import './Subtotal.css';
+import { useStateValue } from '../../contexts/StateProvider';
+import { getBasketTotal } from '../../services/reducer';
+import './style.css';
 
 function Subtotal() {
   const [{ basket }, dispatch] = useStateValue();
