@@ -4,7 +4,7 @@ export const initialState = {
 
 // selectors
 export const getBasketTotal = basket => {
-  return basket.reduce((amount, item) => item.price + amount, 0);
+  return basket.reduce((amount, p) => p.price + amount, 0);
 };
 
 const reducer = (state, action) => {
@@ -13,6 +13,15 @@ const reducer = (state, action) => {
       return {
         ...state,
         basket: [...state.basket, action.payload],
+      };
+
+    case 'REMOVE_FROM_BASKET':
+      let newBasket = [...state.basket];
+      newBasket.splice(action.payload.index, 1);
+
+      return {
+        ...state,
+        basket: newBasket,
       };
 
     default:
