@@ -1,25 +1,31 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { auth } from '../../config';
 import './style.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = e => {
     e.preventDefault();
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(a => navigate('/'))
+      .catch(error => alert(error.message));
   };
 
   const handleRegister = e => {
     e.preventDefault();
 
     createUserWithEmailAndPassword(auth, email, password)
-      .then(auth => {
-        console.log(auth);
-      })
-      .catch(error => console.log(error));
+      .then(a => navigate('/'))
+      .catch(error => alert(error));
   };
 
   return (
