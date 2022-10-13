@@ -10,6 +10,7 @@ import Home from '../../pages/Home';
 import Login from '../../pages/Login';
 import Checkout from '../../pages/Checkout';
 import Payment from '../../pages/Payment';
+import Orders from '../../pages/Orders';
 import './style.css';
 
 const promise = loadStripe(
@@ -51,6 +52,7 @@ function App() {
             </Elements>
           }
         />
+        <Route path="orders" element={<Orders />} />
       </Routes>
     </div>
   );
