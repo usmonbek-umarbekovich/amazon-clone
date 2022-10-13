@@ -8,7 +8,6 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 
-app.get('/', (req, res) => res.status(200).send('Hello World'));
 app.post('/payments/create', async (req, res) => {
   const { total } = req.query;
   const paymentIntent = await stripe.paymentIntents.create({
