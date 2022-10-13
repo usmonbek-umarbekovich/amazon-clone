@@ -5,7 +5,7 @@ import { getBasketTotal } from '../../services/reducer';
 import './style.css';
 
 function Subtotal() {
-  const [{ basket }, dispatch] = useStateValue();
+  const [{ basket }] = useStateValue();
   const navigate = useNavigate();
 
   return (

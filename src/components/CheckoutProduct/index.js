@@ -10,7 +10,7 @@ function CheckoutProduct({
   rating,
   hideButton,
 }) {
-  const [_, dispatch] = useStateValue();
+  const dispatch = useStateValue()[1];
 
   const removeFromBasket = () => {
     dispatch({
