@@ -1,6 +1,6 @@
 export const initialState = {
   basket: [],
-  user: null
+  user: null,
 };
 
 // selectors
@@ -16,6 +16,12 @@ const reducer = (state, action) => {
         basket: [...state.basket, action.payload],
       };
 
+    case 'EMPTY_BASKET':
+      return {
+        ...state,
+        basket: [],
+      };
+
     case 'REMOVE_FROM_BASKET':
       let newBasket = [...state.basket];
       newBasket.splice(action.payload.index, 1);
@@ -28,8 +34,8 @@ const reducer = (state, action) => {
     case 'SET_USER':
       return {
         ...state,
-        user: action.payload
-      }
+        user: action.payload,
+      };
 
     default:
       return state;
