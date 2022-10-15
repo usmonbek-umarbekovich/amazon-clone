@@ -1,6 +1,6 @@
-import { useStateValue } from '../../contexts/StateProvider';
-import Subtotal from '../../components/Subtotal';
-import CheckoutProduct from '../../components/CheckoutProduct';
+import { useStateValue } from '../contexts/StateProvider';
+import Subtotal from '../components/Subtotal';
+import CheckoutProduct from '../components/CheckoutProduct';
 import './style.css';
 
 function Checkout() {

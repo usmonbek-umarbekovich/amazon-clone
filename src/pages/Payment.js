@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { doc, setDoc } from 'firebase/firestore';
 import CurrencyFormat from 'react-currency-format';
-import CheckoutProduct from '../../components/CheckoutProduct';
-import { useStateValue } from '../../contexts/StateProvider';
-import { getBasketTotal } from '../../services/reducer';
-import axios from '../../services/axios';
-import { db } from '../../config';
+import CheckoutProduct from '../components/CheckoutProduct';
+import { useStateValue } from '../contexts/StateProvider';
+import { getBasketTotal } from '../services/reducer';
+import axios from '../services/axios';
+import { db } from '../config';
 import './style.css';
 
 function Payment() {
