@@ -2,8 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config';
 import { useStateValue } from '../contexts/StateProvider';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
-import './style.css';
 import Container from 'react-bootstrap/Container';
 import Stack from 'react-bootstrap/Stack';
 import Navbar from 'react-bootstrap/Navbar';
@@ -11,7 +9,8 @@ import Nav from 'react-bootstrap/Nav';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaShoppingBag } from 'react-icons/fa';
+import './style.css';
 
 function Header() {
   const [{ basket, user }] = useStateValue();
@@ -85,7 +84,7 @@ function Header() {
                   <Stack
                     direction="horizontal"
                     className="text-white align-items-center">
-                    <ShoppingBasketIcon className="me-2" />
+                    <FaShoppingBag className="fs-5 me-2" />
                     <p className="fw-bold m-0" style={{ color: '#f08804' }}>
                       {basket.length}
                     </p>
