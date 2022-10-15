@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { useStateValue } from '../../contexts/StateProvider';
-import { db } from '../../config';
-import Order from '../../components/Order';
+import { useStateValue } from '../contexts/StateProvider';
+import { db } from '../config';
+import Order from '../components/Order';
 import './style.css';
 
 function Orders() {

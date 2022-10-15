@@ -1,4 +1,4 @@
-import { useStateValue } from '../../contexts/StateProvider';
+import { useStateValue } from '../contexts/StateProvider';
 import './style.css';
 
 function CheckoutProduct({

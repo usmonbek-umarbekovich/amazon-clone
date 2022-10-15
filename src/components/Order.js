@@ -1,6 +1,6 @@
 import moment from 'moment';
 import CurrencyFormat from 'react-currency-format';
-import CheckoutProduct from '../../components/CheckoutProduct';
+import CheckoutProduct from './CheckoutProduct';
 import './style.css';
 
 function Order({ order }) {

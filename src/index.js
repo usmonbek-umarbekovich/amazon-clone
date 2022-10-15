@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { StateProvider } from './contexts/StateProvider';
 import reducer, { initialState } from './services/reducer';
-import App from './components/App';
+import App from './App';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
