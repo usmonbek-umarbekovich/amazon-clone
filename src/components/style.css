@@ -123,12 +123,3 @@
   font-size: 17px;
   font-weight: 800;
 }
-
-.header {
-  background-color: #131921;
-}
-
-.header__logo {
-  width: 6rem;
-  object-fit: contain;
-}
