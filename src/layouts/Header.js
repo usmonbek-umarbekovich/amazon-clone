@@ -101,6 +101,7 @@ function Header() {
             id="product-links"
             aria-labelledby="user-canvas"
             placement="end"
+            className="w-75"
             backdropClassName="opacity-75"
             show={showUserLinks}
             onHide={() => setShowUserLinks(false)}>
