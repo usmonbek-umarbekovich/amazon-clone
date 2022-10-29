@@ -37,8 +37,10 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
   }, [ratings]);
 
   return (
-    <Card className="rounded-1 w-100 h-100 flex-row flex-sm-column align-items-center">
-      <div style={{ maxHeight: "13rem" }} className="h-100 px-2 col-4 col-sm-auto">
+    <Card className="rounded-1 bg-white w-100 h-100 flex-row flex-sm-column align-items-center">
+      <div
+        style={{ maxHeight: '13rem' }}
+        className="h-100 px-2 col-4 col-sm-auto">
         <Card.Img
           variant="top"
           className="w-100 h-100 bg-transparent"
@@ -49,10 +51,10 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
       </div>
       <Card.Body className="p-2">
         <Card.Title className="fw-normal mb-1 fs-6">
-          {title.length > 75 ? title.slice(0, 75) + "..." : title}
+          {title.length > 75 ? title.slice(0, 75) + '...' : title}
         </Card.Title>
         <Stack>
-          <Stack direction="horizontal" className='mb-3'>
+          <Stack direction="horizontal" className="mb-3">
             <Stack direction="horizontal" className="me-2">
               {Array(ratingDecimal)
                 .fill()
@@ -68,15 +70,19 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
               {ratings.reduce((prev, curr) => prev + curr)}
             </Link>
           </Stack>
-          <Stack direction='horizontal' className='align-items-end mb-2'>
-            <p className='d-flex align-items-start me-1'>
+          <Stack direction="horizontal" className="align-items-end mb-2">
+            <p className="d-flex align-items-start me-1">
               <small style={{ lineHeight: 0.7 }}>$</small>
-              <strong className='fs-3 fw-semibold' style={{ lineHeight: 0.6 }}>{Math.trunc(price)}</strong>
-              <small style={{ lineHeight: 0.7 }}>{Number(price).toFixed(2).split('.')[1]}</small>
+              <strong className="fs-3 fw-semibold" style={{ lineHeight: 0.6 }}>
+                {Math.trunc(price)}
+              </strong>
+              <small style={{ lineHeight: 0.7 }}>
+                {Number(price).toFixed(2).split('.')[1]}
+              </small>
             </p>
             {actualPrice && (
               <p
-                className='text-decoration-line-through text-secondary'
+                className="text-decoration-line-through text-secondary"
                 style={{ lineHeight: 0.3 }}>
                 ${Number(actualPrice).toFixed(2)}
               </p>
