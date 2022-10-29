@@ -23,10 +23,10 @@ function Header() {
   const [showUserLinks, setShowUserLinks] = useState(false);
 
   return (
-    <header style={{ backgroundColor: '#131921' }} className="header">
+    <header style={{ backgroundColor: '#131921' }}>
       {/* TODO add fixed top */}
-      <Navbar expand="md" variant="dark" className="px-md-4 py-md-2 px-3 pb-3">
-        <Container fluid className="d-flex gap-4 p-0">
+      <Navbar expand="md" variant="dark" className="px-md-3 py-md-2 px-2 pb-3">
+        <Container fluid className="d-flex gap-4">
           <Stack
             gap={{ md: 4 }}
             className="w-100 gap-2 flex-md-row align-items-md-center">
