@@ -37,7 +37,7 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
   }, [ratings]);
 
   return (
-    <Card className="rounded-1 bg-white w-100 h-100 flex-row flex-sm-column align-items-center">
+    <Card className="rounded-1 w-100 h-100 flex-row flex-sm-column align-items-center">
       <div
         style={{ maxHeight: '13rem' }}
         className="h-100 px-2 col-4 col-sm-auto">

@@ -1,27 +1,24 @@
 import Product from './Product';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function ProductList() {
   return (
     <section id="products" className="px-2 px-md-3">
-      <Container fluid>
-        <Row className="g-2">
-          {PRODUCTS.map(p => (
-            <Col key={p.id} sm={6} md={4} lg={3}>
-              <Product
-                id={p.id}
-                title={p.title}
-                price={p.price}
-                actualPrice={p.actualPrice}
-                ratings={p.ratings}
-                image={p.image}
-              />
-            </Col>
-          ))}
-        </Row>
-      </Container>
+      <Row className="g-2">
+        {PRODUCTS.map(p => (
+          <Col key={p.id} sm={6} md={4} lg={3}>
+            <Product
+              id={p.id}
+              title={p.title}
+              price={p.price}
+              actualPrice={p.actualPrice}
+              ratings={p.ratings}
+              image={p.image}
+            />
+          </Col>
+        ))}
+      </Row>
     </section>
   );
 }
