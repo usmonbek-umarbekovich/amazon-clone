@@ -37,8 +37,8 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
   }, [ratings]);
 
   return (
-    <Card className="rounded-1 w-100 m-1">
-      <div style={{ maxHeight: '15rem' }} className="w-100 py-2 px-4">
+    <Card className="rounded-1 w-100 h-100 flex-row flex-sm-column align-items-center">
+      <div style={{ maxHeight: "13rem" }} className="h-100 px-2 col-4 col-sm-auto">
         <Card.Img
           variant="top"
           className="w-100 h-100 bg-transparent"
@@ -47,8 +47,10 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
           alt={title}
         />
       </div>
-      <Card.Body>
-        <Card.Title className="fw-normal mb-1">{title}</Card.Title>
+      <Card.Body className="p-2">
+        <Card.Title className="fw-normal mb-1 fs-6">
+          {title.length > 75 ? title.slice(0, 75) + "..." : title}
+        </Card.Title>
         <Stack>
           <Stack direction="horizontal" className='mb-3'>
             <Stack direction="horizontal" className="me-2">
@@ -62,7 +64,7 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
               )}
               {ratingFraction > 0.7 && <FaStar className="fs-5 text-warning" />}
             </Stack>
-            <Link className="text-decoration-none fs-5">
+            <Link className="text-decoration-none">
               {ratings.reduce((prev, curr) => prev + curr)}
             </Link>
           </Stack>
