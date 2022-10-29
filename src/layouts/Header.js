@@ -25,7 +25,7 @@ function Header() {
   return (
     <header style={{ backgroundColor: '#131921' }}>
       {/* TODO add fixed top */}
-      <Navbar expand="md" variant="dark" className="px-md-3 py-md-2 px-2 pb-3">
+      <Navbar expand="md" variant="dark" className="px-md-3 py-md-2 pb-3">
         <Container fluid className="d-flex gap-4">
           <Stack
             gap={{ md: 4 }}
