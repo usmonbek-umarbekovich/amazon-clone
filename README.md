@@ -1,6 +1,6 @@
 # Amazon Clone
 
-`When you go to the website, chrome will complain about the security.`\
+`When you go to the website, chrome may complain about the security.`\
 `I haven't figured out how to get rid of that warning.`
 
 **For checking out payment functionality, keep typing `42` on the card input field:**\
