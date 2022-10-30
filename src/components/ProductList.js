@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 
 function ProductList() {
   return (
-    <section id="products" className="px-2 px-md-3">
+    <section id="products" className="px-2 px-md-3 pb-3">
       <Row className="g-2">
         {PRODUCTS.map(p => (
           <Col key={p.id} sm={6} md={4} lg={3}>
