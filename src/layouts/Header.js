@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config';
@@ -21,27 +21,51 @@ import {
 function Header() {
   const [{ basket, user }] = useStateValue();
   const [showUserLinks, setShowUserLinks] = useState(false);
+  const [navHeight, setNavHeight] = useState(() =>
+    window.innerWidth < 768 ? 97.5625 : 62.1562
+  );
+  const navRef = useRef();
+
+  useEffect(() => {
+    if (!navRef.current) return;
+    setNavHeight(navRef.current.getBoundingClientRect().height);
+
+    const controller = new AbortController();
+    window.addEventListener(
+      'resize',
+      () => {
+        if (navHeight === navRef.current.getBoundingClientRect().height) return;
+        setNavHeight(navRef.current.getBoundingClientRect().height);
+      },
+      { signal: controller.signal }
+    );
+
+    return () => controller.abort();
+  }, []);
 
   return (
-    <header style={{ backgroundColor: '#131921' }}>
-      {/* TODO add fixed top */}
-      <Navbar expand="md" variant="dark" className="px-md-3 py-md-2 pb-3">
-        <Container fluid className="d-flex gap-4">
-          <Stack
-            gap={{ md: 4 }}
-            className="w-100 gap-2 flex-md-row align-items-md-center">
-            <Stack
-              gap="3"
-              direction="horizontal"
-              className="align-items-center">
+    <header style={{ marginTop: `${navHeight}px` }}>
+      <Navbar
+        ref={navRef}
+        expand="md"
+        variant="dark"
+        fixed="top"
+        style={{ backgroundColor: '#131921', padding: '.35rem 0' }}>
+        <Container fluid className="d-flex">
+          <Stack className="w-100 flex-md-row align-items-md-center">
+            <Stack direction="horizontal" className="align-items-center">
               <Navbar.Toggle
                 disabled
-                className="border-0 p-0 me-0"
-                style={{ marginTop: '-0.3rem' }}
+                className="border-0 p-0 me-2"
+                style={{ marginTop: '-0.5rem' }}
               />
 
-              <Navbar.Brand as={NavLink} to="/" className="m-0 p-0 mt-2">
+              <Navbar.Brand
+                as={NavLink}
+                to="/"
+                className="px-2 py-md-1 pb-0 outline">
                 <img
+                  className="mt-md-2"
                   style={{ width: '6rem', objectFit: 'contain' }}
                   src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
                   alt="logo"
@@ -49,32 +73,37 @@ function Header() {
               </Navbar.Brand>
 
               <Stack
-                gap="3"
                 direction="horizontal"
                 className="d-md-none align-items-center ms-auto">
-                <Nav.Link as={NavLink} to={!user && '/login'} className="px-0">
+                <Nav.Link
+                  as={NavLink}
+                  to={!user && '/login'}
+                  style={{ padding: '.65rem .5rem' }}
+                  className="text-white outline">
                   <Stack
-                    gap="2"
                     direction="horizontal"
-                    className="text-white align-items-center"
+                    className="align-items-center"
                     onClick={() => user && setShowUserLinks(true)}>
                     <p
                       className="m-0"
                       style={{
+                        lineHeight: 0,
                         fontSize: '14px',
                         fontWeight: user ? '500' : '400',
                       }}>
-                      <span>{user ? user.email : 'Sign In'}</span>
+                      {/* TODO temporary split */}
+                      <span>{user?.email.split('@')[0] ?? 'Sign In'}</span>
                       <MdKeyboardArrowRight />
                     </p>
                     <FaRegUser className="fs-5" />
                   </Stack>
                 </Nav.Link>
 
-                <Nav.Link as={NavLink} to="/checkout" className="px-0">
-                  <Stack
-                    direction="horizontal"
-                    className="text-white align-items-center">
+                <Nav.Link
+                  as={NavLink}
+                  to="/checkout"
+                  className="text-white px-2 py-2 outline">
+                  <Stack direction="horizontal" className="align-items-center">
                     <MdShoppingBasket className="fs-3 me-2" />
                     <p className="fw-bold m-0" style={{ color: '#f08804' }}>
                       {basket.length > 99 ? '99+' : basket.length}
@@ -84,10 +113,13 @@ function Header() {
               </Stack>
             </Stack>
 
-            <InputGroup>
+            <InputGroup
+              style={{ marginTop: '.35rem' }}
+              className="mb-1 my-md-0">
               <Form.Control
                 aria-label="Search products"
                 aria-describedby="search-btn"
+                style={{ boxShadow: 'none', border: 'none' }}
               />
               <Button
                 id="search-btn"
@@ -107,10 +139,10 @@ function Header() {
             onHide={() => setShowUserLinks(false)}>
             <Offcanvas.Header
               style={{ backgroundColor: '#232f3e' }}
-              className="flex-column gap-3">
+              className="flex-column">
               <Stack
                 direction="horizontal"
-                className="justify-content-between position-relative">
+                className="justify-content-between position-relative mb-3">
                 <Button
                   style={{ left: '-4.5rem' }}
                   className="position-absolute top-50 bg-transparent link-light border-0"
@@ -128,7 +160,8 @@ function Header() {
                 id="user-canvas"
                 style={{ lineHeight: 0 }}
                 className="text-white me-auto">
-                <p className="pb-2">Hello, {user?.email}</p>
+                {/* TODO temporary split */}
+                <p className="pb-2">Hello, {user?.email.split('@')[0]}</p>
                 <p className="fs-3 fw-normal">Your Account</p>
               </Offcanvas.Title>
             </Offcanvas.Header>
@@ -137,18 +170,19 @@ function Header() {
               <Nav>
                 {/* Nav section on large screens */}
                 <Stack
-                  gap="4"
                   direction="horizontal"
                   className="d-none d-md-flex align-items-center">
                   <Nav.Link
                     as={NavLink}
                     to={!user && '/login'}
-                    className="px-0 text-white">
+                    style={{ padding: '.35rem .5rem' }}
+                    className="text-white ms-3 me-1 outline">
                     <Stack
                       className="text-nowrap justify-content-center"
                       onClick={() => user && signOut(auth)}>
                       <p className="m-0" style={{ fontSize: '12px' }}>
-                        Hello, {user?.email ?? 'Guest'}
+                        {/* TODO temporary split */}
+                        Hello, {user?.email.split('@')[0] ?? 'Guest'}
                       </p>
                       <p className="fw-bold m-0" style={{ fontSize: '14px' }}>
                         {user ? 'Sign out' : 'Sign In'}
@@ -159,7 +193,8 @@ function Header() {
                   <Nav.Link
                     as={NavLink}
                     to="/orders"
-                    className="px-0 text-white">
+                    style={{ padding: '.35rem .5rem' }}
+                    className="text-white me-1 outline">
                     <Stack className="text-nowrap justify-content-center">
                       <p className="m-0" style={{ fontSize: '12px' }}>
                         Returns
@@ -170,7 +205,9 @@ function Header() {
                     </Stack>
                   </Nav.Link>
 
-                  <Stack className="text-white text-nowrap justify-content-center">
+                  <Stack
+                    style={{ cursor: 'pointer', padding: '.35rem .5rem' }}
+                    className="text-white text-nowrap justify-content-center me-1 outline">
                     <p className="m-0" style={{ fontSize: '12px' }}>
                       Your
                     </p>
@@ -182,7 +219,8 @@ function Header() {
                   <Nav.Link
                     as={NavLink}
                     to="/checkout"
-                    className="px-0 text-white">
+                    style={{ padding: '.7rem .5rem' }}
+                    className="text-white outline">
                     <Stack
                       direction="horizontal"
                       className="align-items-center">
@@ -195,10 +233,10 @@ function Header() {
                 </Stack>
 
                 {/* Canvas Section on small screens */}
-                <Stack gap="3" className="d-md-none">
+                <Stack className="d-md-none">
                   <Stack
                     direction="horizontal"
-                    className="d-md-none px-3 justify-content-between">
+                    className="d-md-none justify-content-between px-3 mb-3">
                     <p className="fs-4 m-0" style={{ fontWeight: 500 }}>
                       Your Orders
                     </p>
@@ -212,9 +250,9 @@ function Header() {
 
                   <div
                     style={{ padding: '2px 0' }}
-                    className="w-100 bg-secondary bg-opacity-25"></div>
+                    className="w-100 bg-secondary bg-opacity-25 mb-3"></div>
 
-                  <p className="fs-4 m-0 px-3" style={{ fontWeight: 500 }}>
+                  <p className="fs-4 mb-3 px-3" style={{ fontWeight: 500 }}>
                     Settings
                   </p>
 
