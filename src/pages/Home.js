@@ -3,13 +3,19 @@ import ProductList from '../components/ProductList';
 import './style.css';
 
 function Home() {
-  const [bannerMargin, setBannerMargin] = useState('-10rem');
+  const [bannerMargin, setBannerMargin] = useState('-5rem');
   const bannerRef = useRef();
 
   useEffect(() => {
     if (!bannerRef.current) return;
-    setBannerMargin(
-      `-${bannerRef.current.getBoundingClientRect().height / 2}px`
+    bannerRef.current.addEventListener(
+      'load',
+      () => {
+        setBannerMargin(
+          `-${bannerRef.current.getBoundingClientRect().height / 2}px`
+        );
+      },
+      { once: true }
     );
 
     const controller = new AbortController();

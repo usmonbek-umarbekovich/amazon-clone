@@ -66,7 +66,7 @@ function Header() {
                 className="px-2 py-md-1 pb-0 outline">
                 <img
                   className="mt-md-2"
-                  style={{ width: '6rem', objectFit: 'contain' }}
+                  style={{ maxWidth: '6rem', objectFit: 'contain' }}
                   src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
                   alt="logo"
                 />
@@ -85,7 +85,7 @@ function Header() {
                     className="align-items-center"
                     onClick={() => user && setShowUserLinks(true)}>
                     <p
-                      className="m-0"
+                      className="m-0 text-nowrap"
                       style={{
                         lineHeight: 0,
                         fontSize: '14px',
