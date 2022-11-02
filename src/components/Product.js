@@ -39,7 +39,7 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
         title,
         image,
         price,
-        ratings,
+        selected: true,
       },
     });
   };
