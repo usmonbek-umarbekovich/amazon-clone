@@ -3,7 +3,7 @@ import ProductList from '../components/ProductList';
 import './style.css';
 
 function Home() {
-  const [bannerMargin, setBannerMargin] = useState('-5rem');
+  const [bannerMargin, setBannerMargin] = useState('-8rem');
   const bannerRef = useRef();
 
   useEffect(() => {

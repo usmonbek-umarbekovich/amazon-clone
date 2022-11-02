@@ -9,7 +9,7 @@ function Subtotal() {
   const navigate = useNavigate();
 
   return (
-    <div className="subtotal">
+    <div className="subtotal w-100 bg-white">
       <CurrencyFormat
         renderText={value => (
           <>

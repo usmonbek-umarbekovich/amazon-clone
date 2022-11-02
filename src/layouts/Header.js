@@ -34,7 +34,6 @@ function Header() {
     window.addEventListener(
       'resize',
       () => {
-        if (navHeight === navRef.current.getBoundingClientRect().height) return;
         setNavHeight(navRef.current.getBoundingClientRect().height);
       },
       { signal: controller.signal }
