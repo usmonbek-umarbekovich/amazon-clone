@@ -62,10 +62,10 @@ function Header() {
               <Navbar.Brand
                 as={NavLink}
                 to="/"
-                className="px-sm-2 py-md-1 pb-0 outline">
+                className="px-2 py-md-1 pb-0 outline">
                 <img
-                  className="px-2 px-sm-0 mb-1 mb-sm-0 mt-md-2"
-                  style={{ width: '6rem', objectFit: 'contain' }}
+                  className="mt-md-2"
+                  style={{ maxWidth: '6rem', objectFit: 'contain' }}
                   src="http://pngimg.com/uploads/amazon/amazon_PNG11.png"
                   alt="logo"
                 />
