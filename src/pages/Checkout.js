@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import CurrencyFormat from 'react-currency-format';
+import { getBasketTotal } from '../services/reducer';
 import { useStateValue } from '../contexts/StateProvider';
 import Subtotal from '../components/Subtotal';
 import CheckoutProduct from '../components/CheckoutProduct';
@@ -24,22 +26,28 @@ function Checkout() {
   };
 
   return (
-    <main className="bg-light px-2 py-3">
-      <Container fluid>
-        <Stack direction="horizontal" className="align-items-start">
-          <div
-            style={{ boxShadow: '0 0 .1em rgba(0, 0, 0, 0.1)' }}
-            className="bg-white p-4 me-4">
-            <h1 className="h3 mb-0">Shopping Cart</h1>
+    <main className="bg-light">
+      <Container fluid className="p-0 pb-3 p-sm-4">
+        <Stack className="flex-lg-row-reverse col-lg-12 col-md-10 mx-auto align-items-start">
+          <div className="subtotal-container bg-white p-3 p-sm-4 pt-sm-3 mb-sm-4 ms-lg-4">
+            <Subtotal />
+          </div>
+          <div className="cart-items-container bg-white p-sm-4">
+            <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
             <Button
               variant="link"
-              className="p-0 mb-3"
+              className="d-none d-sm-block text-decoration-none p-0 mb-0"
               onClick={handleSelectProducts}>
               {notAllSelected ? 'Select' : 'Deselect'} all items
             </Button>
+            <p className="d-none d-sm-block text-secondary text-end mb-0">
+              Price
+            </p>
             <ListGroup variant="flush" className="border-top border-bottom">
               {basket.map((product, index) => (
-                <ListGroup.Item key={product.id} className="pt-4 pb-3">
+                <ListGroup.Item
+                  key={product.id}
+                  className="p-2 pt-sm-4 pb-sm-3 px-sm-0 ps-lg-3">
                   <CheckoutProduct
                     index={index}
                     id={product.id}
@@ -51,15 +59,22 @@ function Checkout() {
                 </ListGroup.Item>
               ))}
             </ListGroup>
-          </div>
-          <div
-            style={{
-              width: '23%',
-              flex: '0 0 auto',
-              boxShadow: '0 0 .1em rgba(0, 0, 0, 0.1)',
-            }}
-            className="bg-white">
-            <Subtotal />
+            <CurrencyFormat
+              decimalScale={2}
+              value={getBasketTotal(basket)}
+              displayType="text"
+              thousandSeparator={true}
+              prefix="$"
+              renderText={value => (
+                <p
+                  style={{ fontSize: '1.2rem' }}
+                  className="d-none d-sm-block text-nowrap text-end">
+                  Subtotal ({basket.length} item
+                  {basket.length === 1 ? '' : 's'}):{' '}
+                  <strong className="fw-semibold">{value}</strong>
+                </p>
+              )}
+            />
           </div>
         </Stack>
       </Container>

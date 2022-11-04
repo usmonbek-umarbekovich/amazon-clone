@@ -32,14 +32,14 @@ function CheckoutProduct({
     <Stack direction="horizontal" className="align-items-center">
       <Form.Check
         aria-label={title}
-        className="fs-5 me-2"
+        className="d-none d-sm-block fs-5 me-2"
         checked={selected}
         onChange={e => {
           updateProduct({ selected: e.target.checked });
         }}
       />
 
-      <div style={{ width: '21%', flex: '0 0 auto' }} className="px-2">
+      <div className="cart-product-image-container px-2">
         <img
           className="w-100 h-100"
           style={{ objectFit: 'contain' }}
@@ -48,14 +48,14 @@ function CheckoutProduct({
         />
       </div>
 
-      <div className="ps-2 flex-grow-1">
-        <Stack
-          direction="horizontal"
-          className="align-items-start justify-content-between">
-          <p className="fs-5 fw-normal lh-sm mb-2">
+      <div className="ps-2 flex-grow-1 mb-auto">
+        <Stack className="flex-sm-row align-items-start justify-content-between">
+          <p style={{ fontSize: '1.2rem' }} className="lh-sm mb-2">
             {title.length > 85 ? title.slice(0, 85) + '...' : title}
           </p>
-          <p className="fs-5 fw-semibold text-nowrap text-end col-3">
+          <p
+            style={{ fontSize: '1.2rem' }}
+            className="fw-semibold text-nowrap text-end col-sm-3">
             ${Number(price).toFixed(2)}
           </p>
         </Stack>
