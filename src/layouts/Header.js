@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config';
@@ -21,34 +21,12 @@ import {
 function Header() {
   const [{ basket, user }] = useStateValue();
   const [showUserLinks, setShowUserLinks] = useState(false);
-  const [navHeight, setNavHeight] = useState(() =>
-    window.innerWidth < 768 ? 97.5625 : 62.1562
-  );
-  const navRef = useRef();
-
-  useEffect(() => {
-    if (!navRef.current) return;
-    setNavHeight(navRef.current.getBoundingClientRect().height);
-
-    const controller = new AbortController();
-    window.addEventListener(
-      'resize',
-      () => {
-        setNavHeight(navRef.current.getBoundingClientRect().height);
-      },
-      { signal: controller.signal }
-    );
-
-    return () => controller.abort();
-  }, []);
 
   return (
-    <header style={{ marginTop: `${navHeight}px` }}>
+    <header>
       <Navbar
-        ref={navRef}
         expand="md"
         variant="dark"
-        fixed="top"
         style={{ backgroundColor: '#131921', padding: '.35rem 0' }}>
         <Container fluid className="d-flex">
           <Stack className="w-100 flex-md-row align-items-md-center">
@@ -150,7 +128,8 @@ function Header() {
                 </Button>
                 <Button
                   disabled
-                  className="ms-auto bg-transparent p-1 border-0">
+                  className="ms-auto bg-transparent p-1 border-0"
+                  onClick={() => setShowUserLinks(false)}>
                   Browse <FaBars />
                 </Button>
               </Stack>
@@ -239,12 +218,14 @@ function Header() {
                     <p className="fs-4 m-0" style={{ fontWeight: 500 }}>
                       Your Orders
                     </p>
-                    <Button
-                      as={NavLink}
-                      to="/orders"
-                      variant="outline-info px-1 py-0">
-                      See All
-                    </Button>
+                    <NavLink to="/orders">
+                      <Button
+                        variant="outline-info"
+                        className="px-1 py-0"
+                        onClick={() => setShowUserLinks(false)}>
+                        See All
+                      </Button>
+                    </NavLink>
                   </Stack>
 
                   <div
@@ -258,7 +239,7 @@ function Header() {
                   <Button
                     variant="outline-secondary"
                     style={{ fontSize: '17px' }}
-                    className="rounded-0 border-0 text-start text-black px-3"
+                    className="rounded-0 border-0 text-start px-3"
                     onClick={() => signOut(auth) && setShowUserLinks(false)}>
                     Sign Out
                   </Button>
