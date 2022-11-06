@@ -29,9 +29,7 @@ function Checkout() {
     <main className="bg-light">
       <Container fluid className="p-0 pb-3 p-sm-4">
         <Stack className="flex-lg-row-reverse col-lg-12 col-md-10 mx-auto align-items-start">
-          <div className="subtotal-container bg-white p-3 p-sm-4 pt-sm-3 mb-sm-4 ms-lg-4">
-            <Subtotal />
-          </div>
+          <Subtotal className="d-none d-sm-block subtotal-container bg-white p-4 pt-3 mb-4 ms-lg-4" />
           <div className="cart-items-container bg-white p-sm-4">
             <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
             <Button
