@@ -4,8 +4,12 @@
 
 .cart-product-image-container {
   width: 40%;
-  height: 12rem;
+  height: 11rem;
   flex: 0 0 auto;
+}
+
+.cart-product-image-container > img {
+  vertical-align: top;
 }
 
 @media (min-width: 576px) {
