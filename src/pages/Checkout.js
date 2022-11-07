@@ -8,7 +8,6 @@ import Container from 'react-bootstrap/Container';
 import Stack from 'react-bootstrap/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
-import './style.css';
 
 function Checkout() {
   const [{ basket }, dispatch] = useStateValue();

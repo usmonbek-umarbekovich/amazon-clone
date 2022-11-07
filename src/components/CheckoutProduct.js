@@ -40,12 +40,7 @@ function CheckoutProduct({
       />
 
       <div className="cart-product-image-container px-2">
-        <img
-          className="w-100 h-100"
-          style={{ objectFit: 'contain' }}
-          src={image}
-          alt={title}
-        />
+        <img className="w-100 h-100" src={image} alt={title} />
       </div>
 
       <div className="ps-2 flex-grow-1 mb-auto">

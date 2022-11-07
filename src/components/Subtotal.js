@@ -42,7 +42,9 @@ function Subtotal({ className }) {
         </Stack>
       </div>
 
-      <div id="subtotal-sm-header" className="bg-white w-100 px-3 pt-2 pb-1">
+      <div
+        id="subtotal-sm-header"
+        className="d-sm-none bg-white w-100 p-3 pb-2">
         <CurrencyFormat
           decimalScale={2}
           value={getBasketTotal(basket)}
@@ -50,7 +52,7 @@ function Subtotal({ className }) {
           thousandSeparator={true}
           prefix="$"
           renderText={value => (
-            <p style={{ fontSize: '1.2rem' }} className="d-sm-none lh-sm mb-0">
+            <p className="fs-5 lh-sm mb-0">
               Subtotal <strong className="fw-semibold">{value}</strong>
             </p>
           )}
@@ -59,20 +61,22 @@ function Subtotal({ className }) {
       <div
         id="checkout-sm-button"
         style={{ zIndex: '1000' }}
-        className="bg-white w-100 px-3 py-1 position-sticky top-0">
+        className="d-sm-none bg-white w-100 px-3 py-2 position-sticky top-0">
         <Button
           variant="warning"
-          className="d-sm-none w-100 py-2"
+          className="w-100 py-2"
           onClick={() => navigate('/payment')}>
           Proceed to Checkout ({basket.length} item
           {basket.length === 1 ? '' : 's'})
         </Button>
       </div>
-      <div id="gift-sm-check" className="bg-white w-100 px-3 pt-1 pb-2">
-        <Form.Check
-          className="d-sm-none"
-          label="Send as a gift. Include custom message"
-        />
+      <div id="gift-sm-check" className="d-sm-none bg-white w-100 p-3 pt-2">
+        <Form.Check className="d-flex align-items-center ps-0">
+          <Form.Check.Input className="fs-4 m-0 me-2" />
+          <Form.Check.Label>
+            Send as a gift. Include custom message
+          </Form.Check.Label>
+        </Form.Check>
       </div>
     </>
   );

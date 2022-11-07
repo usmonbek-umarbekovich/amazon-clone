@@ -10,6 +10,7 @@
 
 .cart-product-image-container > img {
   vertical-align: top;
+  object-fit: contain;
 }
 
 @media (min-width: 576px) {
