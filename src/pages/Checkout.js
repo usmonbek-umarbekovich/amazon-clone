@@ -51,6 +51,9 @@ function Checkout() {
                     image={product.image}
                     title={product.title}
                     price={product.price}
+                    inStock={product.inStock}
+                    quantity={product.quantity}
+                    highlights={product.highlights}
                     selected={product.selected}
                   />
                 </ListGroup.Item>
