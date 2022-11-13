@@ -7,15 +7,9 @@ function Home() {
   const bannerRef = useRef();
 
   useEffect(() => {
-    if (!bannerRef.current) return;
-    bannerRef.current.addEventListener(
-      'load',
-      () => {
-        setBannerMargin(
-          `-${bannerRef.current.getBoundingClientRect().height / 2}px`
-        );
-      },
-      { once: true }
+    if (bannerRef.current == null) return;
+    setBannerMargin(
+      `-${bannerRef.current.getBoundingClientRect().height / 2}px`
     );
 
     const controller = new AbortController();

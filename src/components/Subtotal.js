@@ -1,5 +1,6 @@
-import CurrencyFormat from 'react-currency-format';
+import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CurrencyFormat from 'react-currency-format';
 import { useStateValue } from '../contexts/StateProvider';
 import { getBasketTotal } from '../services/reducer';
 import Stack from 'react-bootstrap/Stack';
@@ -9,6 +10,37 @@ import Button from 'react-bootstrap/Button';
 function Subtotal({ className }) {
   const [{ basket }] = useStateValue();
   const navigate = useNavigate();
+  const checkoutBtnContainerRef = useRef();
+  const prevScrollTop = useRef(1);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (window.innerWidth >= 576) return;
+
+        const currScrollTop =
+          checkoutBtnContainerRef.current.getBoundingClientRect().top;
+
+        if (
+          (prevScrollTop.current > 0 && currScrollTop > 0) ||
+          (prevScrollTop.current === 0 && currScrollTop === 0)
+        )
+          return;
+
+        if (currScrollTop === 0) {
+          checkoutBtnContainerRef.current.classList.add('border-bottom');
+        } else if (currScrollTop > 0) {
+          checkoutBtnContainerRef.current.classList.remove('border-bottom');
+        }
+        prevScrollTop.current = currScrollTop;
+      },
+      { signal: controller.signal }
+    );
+
+    return () => controller.abort();
+  }, []);
 
   return (
     <>
@@ -59,6 +91,7 @@ function Subtotal({ className }) {
         />
       </div>
       <div
+        ref={checkoutBtnContainerRef}
         id="checkout-sm-button"
         style={{ zIndex: '1000' }}
         className="d-sm-none bg-white w-100 px-3 py-2 position-sticky top-0">
