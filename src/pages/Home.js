@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import ProductList from '../components/ProductList';
 import './style.css';
 
@@ -6,24 +6,31 @@ function Home() {
   const [bannerMargin, setBannerMargin] = useState('-8rem');
   const bannerRef = useRef();
 
-  useEffect(() => {
-    if (bannerRef.current == null) return;
+  const handleBannerMargin = useCallback(() => {
     setBannerMargin(
       `-${bannerRef.current.getBoundingClientRect().height / 2}px`
     );
+  }, []);
 
+  useEffect(() => {
+    if (bannerRef.current == null) return;
+    handleBannerMargin();
+  }, [handleBannerMargin]);
+
+  useEffect(() => {
     const controller = new AbortController();
-    window.addEventListener(
-      'resize',
-      () =>
-        setBannerMargin(
-          `-${bannerRef.current.getBoundingClientRect().height / 2}px`
-        ),
-      { signal: controller.signal }
-    );
+
+    window.addEventListener('load', handleBannerMargin, {
+      once: true,
+      signal: controller.signal,
+    });
+
+    window.addEventListener('resize', handleBannerMargin, {
+      signal: controller.signal,
+    });
 
     return () => controller.abort();
-  }, []);
+  }, [handleBannerMargin]);
 
   return (
     <div id="home">

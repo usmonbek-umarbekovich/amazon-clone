@@ -52,7 +52,7 @@ function Subtotal({ className }) {
           thousandSeparator={true}
           prefix="$"
           renderText={value => (
-            <p style={{ fontSize: '1.2rem' }} className="lh-sm mb-lg-0 mb-3">
+            <p style={{ fontSize: '1.125rem' }} className="lh-sm mb-lg-0 mb-3">
               Subtotal ({basket.length} item{basket.length === 1 ? '' : 's'}):{' '}
               <strong className="fw-semibold">{value}</strong>
             </p>
@@ -61,12 +61,18 @@ function Subtotal({ className }) {
         <Stack
           direction="horizontal"
           className="flex-lg-column justify-content-between align-items-center">
-          <Form.Check
-            label="This order contains a gift"
-            className="mb-lg-3 me-lg-auto"
-          />
+          <Form.Check className="mb-lg-3 me-lg-auto">
+            <Form.Check.Input
+              className="border-secondary"
+              style={{ marginTop: '.4rem', fontSize: '.8125rem' }}
+            />
+            <Form.Check.Label style={{ fontSize: '.875rem' }}>
+              This order contains a gift
+            </Form.Check.Label>
+          </Form.Check>
           <Button
             variant="warning"
+            style={{ fontSize: '.875rem' }}
             className="rounded-3 col-lg-12 col-6"
             onClick={() => navigate('/payment')}>
             Proceed to Checkout

@@ -25,26 +25,29 @@ function Checkout() {
   };
 
   return (
-    <main className="bg-light">
-      <Container fluid className="p-0 pb-3 p-sm-4">
+    <main id="shopping-cart" className="bg-light">
+      <Container fluid className="p-0 pb-3">
         <Stack className="flex-lg-row-reverse col-lg-12 col-md-10 mx-auto align-items-start">
           <Subtotal className="d-none d-sm-block subtotal-container bg-white p-4 pt-3 mb-4 ms-lg-4" />
-          <div className="cart-items-container bg-white p-sm-4">
+          <div className="cart-items-container bg-white">
             <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
             <Button
               variant="link"
-              className="d-none d-sm-block text-decoration-none p-0 mb-0"
+              style={{ fontSize: '.875rem' }}
+              className="d-none d-sm-block text-decoration-none p-0 mb-0 link-success"
               onClick={handleSelectProducts}>
               {notAllSelected ? 'Select' : 'Deselect'} all items
             </Button>
-            <p className="d-none d-sm-block text-secondary text-end mb-0">
+            <p
+              style={{ fontSize: '.875rem' }}
+              className="d-none d-sm-block text-secondary text-end mb-0">
               Price
             </p>
             <ListGroup variant="flush" className="border-top border-bottom">
               {basket.map((product, index) => (
                 <ListGroup.Item
                   key={product.id}
-                  className="p-2 pt-sm-4 pb-sm-3 px-sm-0 ps-lg-3">
+                  className="cart-product-container">
                   <CheckoutProduct
                     index={index}
                     id={product.id}
@@ -67,7 +70,7 @@ function Checkout() {
               prefix="$"
               renderText={value => (
                 <p
-                  style={{ fontSize: '1.2rem' }}
+                  style={{ fontSize: '1.125rem' }}
                   className="d-none d-sm-block text-nowrap text-end">
                   Subtotal ({basket.length} item
                   {basket.length === 1 ? '' : 's'}):{' '}
