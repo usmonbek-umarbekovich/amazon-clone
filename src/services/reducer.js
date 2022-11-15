@@ -8,6 +8,7 @@ export const initialState = {
       inStock: 99,
       quantity: 1,
       selected: true,
+      isGift: false,
       image:
         'https://images-na.ssl-images-amazon.com/images/I/816ctt5WV5L._AC_SX385_.jpg',
       highlights: {
@@ -24,6 +25,7 @@ export const initialState = {
       inStock: 8,
       quantity: 2,
       selected: true,
+      isGift: false,
       image:
         'https://images-na.ssl-images-amazon.com/images/I/6125mFrzr6L._AC_SX355_.jpg',
       highlights: {
@@ -40,6 +42,7 @@ export const initialState = {
       inStock: 99,
       quantity: 2,
       selected: true,
+      isGift: false,
       image:
         'https://images-na.ssl-images-amazon.com/images/I/81O%2BGNdkzKL._AC_SX450_.jpg',
       highlights: {
@@ -54,6 +57,7 @@ export const initialState = {
       inStock: 7,
       quantity: 1,
       selected: true,
+      isGift: false,
       image:
         'https://images-na.ssl-images-amazon.com/images/I/51Zymoq7UnL._SX325_BO1,204,203,200_.jpg',
       highlights: {},
@@ -66,6 +70,7 @@ export const initialState = {
       inStock: 99,
       quantity: 3,
       selected: true,
+      isGift: false,
       image:
         'https://images-na.ssl-images-amazon.com/images/I/71Swqqe7XAL._AC_SX466_.jpg',
       highlights: {
@@ -81,6 +86,7 @@ export const initialState = {
       inStock: 6,
       quantity: 1,
       selected: true,
+      isGift: false,
       image:
         'https://media.very.co.uk/i/very/P6LTG_SQ1_0000000071_CHARCOAL_SLf?$300x400_retinamobilex2$',
       highlights: {

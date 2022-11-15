@@ -58,6 +58,7 @@ function Checkout() {
                     quantity={product.quantity}
                     highlights={product.highlights}
                     selected={product.selected}
+                    isGift={product.isGift}
                   />
                 </ListGroup.Item>
               ))}

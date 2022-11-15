@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 function Subtotal({ className }) {
-  const [{ basket }] = useStateValue();
+  const [{ basket }, dispatch] = useStateValue();
   const navigate = useNavigate();
 
   const checkoutBtnContainerRef = useRef();
@@ -45,6 +45,13 @@ function Subtotal({ className }) {
     return () => controller.abort();
   }, []);
 
+  const updateBasketProducts = changes => {
+    dispatch({
+      type: 'UPDATE_BASKET',
+      payload: changes,
+    });
+  };
+
   return (
     <>
       <div className={className}>
@@ -68,6 +75,8 @@ function Subtotal({ className }) {
             <Form.Check.Input
               className="border-secondary"
               style={{ marginTop: '.4rem', fontSize: '.8125rem' }}
+              checked={basket.some(p => p.isGift)}
+              onChange={e => updateBasketProducts({ isGift: e.target.checked })}
             />
             <Form.Check.Label style={{ fontSize: '.875rem' }}>
               This order contains a gift
