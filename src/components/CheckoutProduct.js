@@ -46,19 +46,28 @@ function CheckoutProduct({
         onChange={e => updateProduct({ selected: e.target.checked })}
       />
 
-      <div className="cart-product-image-container px-2 mb-auto">
-        <img className="w-100 h-100" src={image} alt={title} />
+      <div className="cart-product-image-container px-sm-2 mb-auto">
+        <img className="mw-100" src={image} alt={title} />
       </div>
 
       <div className="ps-2 flex-grow-1 mb-auto" style={{ fontSize: '.75rem' }}>
         <Stack className="flex-sm-row align-items-start justify-content-between">
-          <p style={{ fontSize: '1.125rem' }} className="lh-sm mb-2">
+          <p className="cart-product-title lh-sm mb-1">
             {title.length > 85 ? title.slice(0, 85) + '...' : title}
           </p>
           <p
             style={{ fontSize: '1.2rem' }}
-            className="fw-semibold text-nowrap text-end col-sm-3">
+            className="d-none d-sm-block fw-semibold text-nowrap text-end col-sm-3">
             ${Number(price).toFixed(2)}
+          </p>
+          <p
+            style={{ lineHeight: 1, fontSize: '.8125rem' }}
+            className="d-flex d-sm-none align-items-start fw-bold mb-0">
+            <span style={{ marginTop: '.185rem' }}>$</span>
+            <span style={{ fontSize: '1.375rem' }}>{Math.trunc(price)}</span>
+            <span style={{ marginTop: '.125rem' }}>
+              {Number(price).toFixed(2).split('.')[1]}
+            </span>
           </p>
         </Stack>
 
