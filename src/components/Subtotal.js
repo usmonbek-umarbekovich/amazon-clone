@@ -142,6 +142,8 @@ function Subtotal({ className }) {
           <Form.Check.Input
             style={{ fontSize: '1.5rem' }}
             className="m-0 me-2"
+            checked={basket.some(p => p.isGift)}
+            onChange={e => updateBasketProducts({ isGift: e.target.checked })}
           />
           <Form.Check.Label style={{ fontSize: '.9375rem' }}>
             Send as a gift. Include custom message
