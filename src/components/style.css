@@ -43,7 +43,7 @@
 
 .cart-quantity-controller {
   flex-shrink: 0;
-  margin: 0 0.625rem 0.5rem 0;
+  margin-right: 0.625rem;
   width: 8.4375rem !important;
   height: 2.1875rem !important;
 }
@@ -76,14 +76,34 @@
   box-shadow: 0 2px 5px 0 rgb(213 217 217 / 50%);
 }
 
-#cart-control-sm-container .btn-container {
-  margin-left: 0.75rem;
-  padding-left: 0.75rem;
+#cart-control-sm-container .btn-separator {
+  width: 0.0625rem;
+  height: 0.75rem;
+  margin: 0 0.75rem;
 }
 
 #cart-control-sm-container .btn-link {
   font-size: inherit;
   line-height: 1;
+}
+
+#cart-control-container form input,
+#cart-control-sm-container form input {
+  width: 5rem;
+  font-size: 0.8125rem;
+  border-color: #888c8c;
+}
+
+#cart-control-container form input:focus,
+#cart-control-sm-container form input:focus {
+  border-color: #007185;
+  box-shadow: 0 0 0 3px #c8f3fa, 0 1px 2px rgb(15 17 17 / 15%) inset;
+}
+
+#cart-control-sm-container form button {
+  font-size: 0.6875rem;
+  height: 1.4rem;
+  padding: 0 0.4rem;
 }
 
 #cart-control-container .btn-container {
@@ -97,9 +117,23 @@
 
 #cart-control-container .btn-link {
   white-space: nowrap;
-  color: #0f1111 !important;
+  color: #0f1111;
   font-size: 0.8125rem;
   line-height: 1.35;
+}
+
+#cart-control-container form {
+  float: left;
+  margin: 0 3.625rem 0.5rem 0;
+}
+
+#cart-control-container form input {
+  font-size: 0.9375rem;
+}
+
+#cart-control-container form button {
+  height: 2.2rem;
+  font-size: 0.8125rem;
 }
 
 @media (min-width: 576px) {
