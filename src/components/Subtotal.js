@@ -2,19 +2,16 @@ import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import { useStateValue } from '../contexts/StateProvider';
-import { getBasketTotal } from '../services/reducer';
 import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-function Subtotal({ className }) {
+function Subtotal({ className, numItems, totalPrice }) {
   const [{ basket }, dispatch] = useStateValue();
   const navigate = useNavigate();
 
   const checkoutBtnContainerRef = useRef();
   const prevScrollTop = useRef(1);
-
-  const totalPrice = getBasketTotal(basket);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -63,7 +60,7 @@ function Subtotal({ className }) {
           prefix="$"
           renderText={value => (
             <p style={{ fontSize: '1.125rem' }} className="lh-sm mb-lg-0 mb-3">
-              Subtotal ({basket.length} item{basket.length === 1 ? '' : 's'}):{' '}
+              Subtotal ({numItems} item{numItems === 1 ? '' : 's'}):{' '}
               <strong className="fw-semibold">{value}</strong>
             </p>
           )}
@@ -130,8 +127,8 @@ function Subtotal({ className }) {
           style={{ fontSize: '.9375rem', padding: '.66rem 0' }}
           className="w-100"
           onClick={() => navigate('/payment')}>
-          Proceed to Checkout ({basket.length} item
-          {basket.length === 1 ? '' : 's'})
+          Proceed to Checkout ({numItems} item
+          {numItems === 1 ? '' : 's'})
         </Button>
       </div>
       <div
