@@ -1,8 +1,11 @@
+import { useState, useEffect, useRef } from 'react';
 import Stack from 'react-bootstrap/Stack';
+import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ListGroup from 'react-bootstrap/ListGroup';
 import { useStateValue } from '../contexts/StateProvider';
 import { MdDeleteOutline } from 'react-icons/md';
 
@@ -19,7 +22,18 @@ function CheckoutProduct({
   isGift,
   hideButton,
 }) {
+  const [showModal, setShowModal] = useState(false);
+  const [isInput, setIsInput] = useState(false);
+  const [isInputSubmitted, setIsInputSubmitted] = useState(true);
+  const [inputQuantity, setInputQuantity] = useState('1');
+  const inputQuantityRef = useRef();
   const dispatch = useStateValue()[1];
+
+  useEffect(() => {
+    if (!isInput || !inputQuantityRef.current) return;
+    inputQuantityRef.current.focus();
+    inputQuantityRef.current.select();
+  }, [isInput]);
 
   const removeFromBasket = () => {
     dispatch({
@@ -33,6 +47,35 @@ function CheckoutProduct({
       type: 'UPDATE_BASKET_PRODUCT',
       payload: { id, changes },
     });
+  };
+
+  const handleQuantitySubmit = e => {
+    e.preventDefault();
+
+    const parsed = Number(inputQuantity);
+    if (Number.isInteger(parsed)) {
+      if (parsed > 0) {
+        updateProduct({ quantity: parsed });
+        setIsInputSubmitted(true);
+      } else {
+        removeFromBasket();
+      }
+
+      if (parsed < 10) {
+        setIsInput(false);
+        setInputQuantity('1');
+      }
+    }
+  };
+
+  const handleQuantityChange = e => {
+    const val = e.target.value;
+    if (!val) return setInputQuantity('');
+
+    const parsed = Number(val);
+    if (Number.isInteger(parsed)) {
+      setInputQuantity(parsed.toString());
+    }
   };
 
   return (
@@ -113,38 +156,75 @@ function CheckoutProduct({
               id="cart-control-sm-container"
               className="d-none d-sm-flex align-items-center"
               style={{ fontSize: '.75rem' }}>
-              <Dropdown>
-                <Dropdown.Toggle
-                  size="sm"
-                  className="rounded-2 border-secondary text-dark">
-                  Qty: <span className="mx-1">{quantity}</span>
-                </Dropdown.Toggle>
-                <Dropdown.Menu className="cart-product-quantity-menu">
-                  <Dropdown.Item eventKey="0" onClick={removeFromBasket}>
-                    0 (Delete)
-                  </Dropdown.Item>
-                  <Dropdown.Divider className="my-0" />
-                  {Array(Math.min(9, inStock))
-                    .fill()
-                    .map((_, i) => (
-                      <Dropdown.Item
-                        key={i}
-                        eventKey={i + 1}
-                        active={i + 1 === quantity}
-                        onClick={() => updateProduct({ quantity: i + 1 })}>
-                        {i + 1}
-                      </Dropdown.Item>
-                    ))}
-                  {inStock > 9 && (
-                    <>
-                      <Dropdown.Divider className="my-0" />
-                      <Dropdown.Item eventKey="10">10+</Dropdown.Item>
-                    </>
+              {isInput ? (
+                <Form
+                  className="d-flex align-items-center"
+                  onSubmit={handleQuantitySubmit}>
+                  <Form.Control
+                    ref={inputQuantityRef}
+                    size="sm"
+                    maxLength={3}
+                    aria-label="Quantity"
+                    autoComplete="false"
+                    className="me-1"
+                    value={inputQuantity}
+                    onChange={handleQuantityChange}
+                    onFocus={() => setIsInputSubmitted(false)}
+                  />
+                  {inputQuantity && !isInputSubmitted && (
+                    <Button
+                      size="sm"
+                      type="submit"
+                      variant="warning"
+                      className="rounded-3">
+                      Update
+                    </Button>
                   )}
-                </Dropdown.Menu>
-              </Dropdown>
+                </Form>
+              ) : (
+                <Dropdown>
+                  <Dropdown.Toggle
+                    size="sm"
+                    className="rounded-2 border-secondary text-dark">
+                    Qty: <span className="mx-1">{quantity}</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="cart-product-quantity-menu">
+                    <Dropdown.Item
+                      eventKey="0"
+                      active={false}
+                      onClick={removeFromBasket}>
+                      0 (Delete)
+                    </Dropdown.Item>
+                    <Dropdown.Divider className="my-0" />
+                    {Array(Math.min(9, inStock))
+                      .fill()
+                      .map((_, i) => (
+                        <Dropdown.Item
+                          key={i}
+                          eventKey={i + 1}
+                          active={i + 1 === quantity}
+                          onClick={() => updateProduct({ quantity: i + 1 })}>
+                          {i + 1}
+                        </Dropdown.Item>
+                      ))}
+                    {inStock > 9 && (
+                      <>
+                        <Dropdown.Divider className="my-0" />
+                        <Dropdown.Item
+                          eventKey="10"
+                          active={false}
+                          onClick={() => setIsInput(true)}>
+                          10+
+                        </Dropdown.Item>
+                      </>
+                    )}
+                  </Dropdown.Menu>
+                </Dropdown>
+              )}
 
-              <div className="btn-container d-flex border-start">
+              <div className="btn-separator bg-secondary opacity-25"></div>
+
+              <div className="btn-container d-flex">
                 <Button
                   variant="link"
                   className="p-0 text-decoration-none link-success"
@@ -153,7 +233,9 @@ function CheckoutProduct({
                 </Button>
               </div>
 
-              <div className="btn-container d-flex border-start">
+              <div className="btn-separator bg-secondary opacity-25"></div>
+
+              <div className="btn-container d-flex">
                 <Button
                   disabled
                   variant="link"
@@ -162,7 +244,9 @@ function CheckoutProduct({
                 </Button>
               </div>
 
-              <div className="btn-container d-flex border-start">
+              <div className="btn-separator bg-secondary opacity-25"></div>
+
+              <div className="btn-container d-flex">
                 <Button
                   disabled
                   variant="link"
@@ -179,55 +263,129 @@ function CheckoutProduct({
       {!hideButton && (
         <div
           id="cart-control-container"
-          className="d-flex d-sm-none flex-wrap align-items-center"
+          className="d-sm-none"
           style={{ fontSize: '.75rem' }}>
-          <ButtonGroup
-            size="sm"
-            aria-label="Product Quantity"
-            className="cart-quantity-controller">
-            <Button
-              variant="light"
-              onClick={() =>
-                quantity === 1
-                  ? removeFromBasket()
-                  : updateProduct({ quantity: quantity - 1 })
-              }>
-              {quantity === 1 ? <MdDeleteOutline /> : '-'}
-            </Button>
-            <Button variant="light">{quantity}</Button>
-            <Button
-              variant="light"
-              onClick={() => updateProduct({ quantity: quantity + 1 })}>
-              {'+'}
-            </Button>
-          </ButtonGroup>
+          {isInput ? (
+            <Form
+              className="d-inline-block flex-column align-items-start"
+              onSubmit={handleQuantitySubmit}>
+              <Form.Control
+                ref={inputQuantityRef}
+                maxLength={3}
+                aria-label="Quantity"
+                autoComplete="false"
+                value={inputQuantity}
+                onChange={handleQuantityChange}
+                onFocus={() => setIsInputSubmitted(false)}
+              />
+              {inputQuantity && quantity !== Number(inputQuantity) && (
+                <Button
+                  type="submit"
+                  variant="warning"
+                  className="rounded-3 mt-2 w-100">
+                  Update
+                </Button>
+              )}
+            </Form>
+          ) : (
+            <ButtonGroup
+              size="sm"
+              aria-label="Product Quantity"
+              className="cart-quantity-controller">
+              <Button
+                variant="light"
+                onClick={() =>
+                  quantity === 1
+                    ? removeFromBasket()
+                    : updateProduct({ quantity: quantity - 1 })
+                }>
+                {quantity === 1 ? <MdDeleteOutline /> : '-'}
+              </Button>
+              <Button variant="light" onClick={() => setShowModal(true)}>
+                {quantity}
+              </Button>
+              <Button
+                variant="light"
+                onClick={() => updateProduct({ quantity: quantity + 1 })}>
+                {'+'}
+              </Button>
+            </ButtonGroup>
+          )}
 
-          <div className="btn-container d-flex border-start">
+          <div className="btn-container d-inline-block">
             <Button
               variant="link"
-              className="p-0 text-decoration-none link-success"
+              className="p-0 text-decoration-none"
               onClick={removeFromBasket}>
               Delete
             </Button>
           </div>
 
-          <div className="btn-container d-flex border-start">
+          <div className="btn-container d-inline-block">
             <Button
               disabled
               variant="link"
-              className="p-0 text-decoration-none link-success">
+              className="p-0 text-decoration-none">
               Save for later
             </Button>
           </div>
 
-          <div className="btn-container d-flex border-start">
+          <div className="btn-container d-inline-block">
             <Button
               disabled
               variant="link"
-              className="p-0 text-decoration-none link-success">
+              className="p-0 text-decoration-none">
               Compare with similar items
             </Button>
           </div>
+
+          <Modal
+            centered
+            scrollable
+            show={showModal}
+            aria-labelledby="Product Quantity"
+            className="quantity-modal w-50 top-50 start-50 translate-middle"
+            onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton className="px-4">
+              <Modal.Title as="h4" className="fs-6 fw-bold">
+                Quantity
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="p-0">
+              <ListGroup variant="flush">
+                <ListGroup.Item
+                  action
+                  eventKey="0"
+                  active={false}
+                  onClick={() => setShowModal(false) & removeFromBasket()}>
+                  0 (Delete)
+                </ListGroup.Item>
+                {Array(Math.min(9, inStock))
+                  .fill()
+                  .map((_, i) => (
+                    <ListGroup.Item
+                      action
+                      key={i}
+                      eventKey={i + 1}
+                      active={i + 1 === quantity}
+                      onClick={() =>
+                        setShowModal(false) & updateProduct({ quantity: i + 1 })
+                      }>
+                      {i + 1}
+                    </ListGroup.Item>
+                  ))}
+                {inStock > 9 && (
+                  <ListGroup.Item
+                    action
+                    eventKey="10"
+                    active={false}
+                    onClick={() => setShowModal(false) & setIsInput(true)}>
+                    10+
+                  </ListGroup.Item>
+                )}
+              </ListGroup>
+            </Modal.Body>
+          </Modal>
         </div>
       )}
     </Stack>
