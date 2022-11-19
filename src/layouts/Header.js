@@ -22,6 +22,8 @@ function Header() {
   const [{ basket, user }] = useStateValue();
   const [showUserLinks, setShowUserLinks] = useState(false);
 
+  const numItems = basket.reduce((prev, curr) => prev + curr.quantity, 0);
+
   return (
     <header>
       <Navbar
@@ -83,7 +85,7 @@ function Header() {
                   <Stack direction="horizontal" className="align-items-center">
                     <MdShoppingBasket className="fs-3 me-2" />
                     <p className="fw-bold m-0" style={{ color: '#f08804' }}>
-                      {basket.length > 99 ? '99+' : basket.length}
+                      {numItems > 99 ? '99+' : numItems}
                     </p>
                   </Stack>
                 </Nav.Link>
@@ -204,7 +206,7 @@ function Header() {
                       className="align-items-center">
                       <MdShoppingBasket className="fs-3 me-2" />
                       <p className="fw-bold m-0" style={{ color: '#f08804' }}>
-                        {basket.length > 99 ? '99+' : basket.length}
+                        {numItems > 99 ? '99+' : numItems}
                       </p>
                     </Stack>
                   </Nav.Link>
