@@ -13,6 +13,9 @@ function Checkout() {
   const [{ basket }, dispatch] = useStateValue();
   const notAllSelected = basket.some(p => !p.selected);
 
+  const totalPrice = getBasketTotal(basket);
+  const numItems = basket.reduce((prev, curr) => prev + curr.quantity, 0);
+
   useEffect(() => {
     document.title = 'Amazon.com Shopping Cart';
   }, []);
@@ -28,7 +31,11 @@ function Checkout() {
     <main id="shopping-cart" className="bg-light">
       <Container fluid className="p-0 pb-3">
         <Stack className="flex-lg-row-reverse col-lg-12 col-md-10 mx-auto align-items-start">
-          <Subtotal className="d-none d-sm-block subtotal-container bg-white p-4 pt-3 mb-4 ms-lg-4" />
+          <Subtotal
+            totalPrice={totalPrice}
+            numItems={numItems}
+            className="d-none d-sm-block subtotal-container bg-white p-4 pt-3 mb-4 ms-lg-4"
+          />
           <div className="cart-items-container bg-white">
             <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
             <Button
@@ -65,7 +72,7 @@ function Checkout() {
             </ListGroup>
             <CurrencyFormat
               decimalScale={2}
-              value={getBasketTotal(basket)}
+              value={totalPrice}
               displayType="text"
               thousandSeparator={true}
               prefix="$"
@@ -73,8 +80,8 @@ function Checkout() {
                 <p
                   style={{ fontSize: '1.125rem' }}
                   className="d-none d-sm-block text-nowrap text-end">
-                  Subtotal ({basket.length} item
-                  {basket.length === 1 ? '' : 's'}):{' '}
+                  Subtotal ({numItems} item
+                  {numItems === 1 ? '' : 's'}):{' '}
                   <strong className="fw-semibold">{value}</strong>
                 </p>
               )}
