@@ -17,10 +17,10 @@ function CheckoutProduct({
   price,
   inStock,
   quantity,
-  highlights,
   selected,
   isGift,
   hideButton,
+  highlights = {},
 }) {
   const [showModal, setShowModal] = useState(false);
   const [isInput, setIsInput] = useState(false);
