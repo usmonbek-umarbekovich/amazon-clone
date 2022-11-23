@@ -19,7 +19,6 @@ function CheckoutProduct({
   quantity,
   selected,
   isGift,
-  hideButton,
   highlights = {},
 }) {
   const [showModal, setShowModal] = useState(false);
@@ -151,243 +150,233 @@ function CheckoutProduct({
           </Stack>
 
           {/* Control buttons on large screens */}
-          {!hideButton && (
-            <div
-              id="cart-control-sm-container"
-              className="d-none d-sm-flex align-items-center"
-              style={{ fontSize: '.75rem' }}>
-              {isInput ? (
-                <Form
-                  className="d-flex align-items-center"
-                  onSubmit={handleQuantitySubmit}>
-                  <Form.Control
-                    ref={inputQuantityRef}
+          <div
+            id="cart-control-sm-container"
+            className="d-none d-sm-flex align-items-center"
+            style={{ fontSize: '.75rem' }}>
+            {isInput ? (
+              <Form
+                className="d-flex align-items-center"
+                onSubmit={handleQuantitySubmit}>
+                <Form.Control
+                  ref={inputQuantityRef}
+                  size="sm"
+                  maxLength={3}
+                  aria-label="Quantity"
+                  autoComplete="false"
+                  className="me-1"
+                  value={inputQuantity}
+                  onChange={handleQuantityChange}
+                  onFocus={() => setIsInputSubmitted(false)}
+                />
+                {inputQuantity && !isInputSubmitted && (
+                  <Button
                     size="sm"
-                    maxLength={3}
-                    aria-label="Quantity"
-                    autoComplete="false"
-                    className="me-1"
-                    value={inputQuantity}
-                    onChange={handleQuantityChange}
-                    onFocus={() => setIsInputSubmitted(false)}
-                  />
-                  {inputQuantity && !isInputSubmitted && (
-                    <Button
-                      size="sm"
-                      type="submit"
-                      variant="warning"
-                      className="rounded-3">
-                      Update
-                    </Button>
+                    type="submit"
+                    variant="warning"
+                    className="rounded-3">
+                    Update
+                  </Button>
+                )}
+              </Form>
+            ) : (
+              <Dropdown>
+                <Dropdown.Toggle
+                  size="sm"
+                  className="rounded-2 border-secondary text-dark">
+                  Qty: <span className="mx-1">{quantity}</span>
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="cart-product-quantity-menu">
+                  <Dropdown.Item
+                    eventKey="0"
+                    active={false}
+                    onClick={removeFromBasket}>
+                    0 (Delete)
+                  </Dropdown.Item>
+                  <Dropdown.Divider className="my-0" />
+                  {Array(Math.min(9, inStock))
+                    .fill()
+                    .map((_, i) => (
+                      <Dropdown.Item
+                        key={i}
+                        eventKey={i + 1}
+                        active={i + 1 === quantity}
+                        onClick={() => updateProduct({ quantity: i + 1 })}>
+                        {i + 1}
+                      </Dropdown.Item>
+                    ))}
+                  {inStock > 9 && (
+                    <>
+                      <Dropdown.Divider className="my-0" />
+                      <Dropdown.Item
+                        eventKey="10"
+                        active={false}
+                        onClick={() => setIsInput(true)}>
+                        10+
+                      </Dropdown.Item>
+                    </>
                   )}
-                </Form>
-              ) : (
-                <Dropdown>
-                  <Dropdown.Toggle
-                    size="sm"
-                    className="rounded-2 border-secondary text-dark">
-                    Qty: <span className="mx-1">{quantity}</span>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="cart-product-quantity-menu">
-                    <Dropdown.Item
-                      eventKey="0"
-                      active={false}
-                      onClick={removeFromBasket}>
-                      0 (Delete)
-                    </Dropdown.Item>
-                    <Dropdown.Divider className="my-0" />
-                    {Array(Math.min(9, inStock))
-                      .fill()
-                      .map((_, i) => (
-                        <Dropdown.Item
-                          key={i}
-                          eventKey={i + 1}
-                          active={i + 1 === quantity}
-                          onClick={() => updateProduct({ quantity: i + 1 })}>
-                          {i + 1}
-                        </Dropdown.Item>
-                      ))}
-                    {inStock > 9 && (
-                      <>
-                        <Dropdown.Divider className="my-0" />
-                        <Dropdown.Item
-                          eventKey="10"
-                          active={false}
-                          onClick={() => setIsInput(true)}>
-                          10+
-                        </Dropdown.Item>
-                      </>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              )}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
-              <div className="btn-separator bg-secondary opacity-25"></div>
+            <div className="btn-separator bg-secondary opacity-25"></div>
 
-              <div className="btn-container d-flex">
-                <Button
-                  variant="link"
-                  className="p-0 text-decoration-none link-success"
-                  onClick={removeFromBasket}>
-                  Delete
-                </Button>
-              </div>
-
-              <div className="btn-separator bg-secondary opacity-25"></div>
-
-              <div className="btn-container d-flex">
-                <Button
-                  disabled
-                  variant="link"
-                  className="p-0 text-decoration-none link-success">
-                  Save for later
-                </Button>
-              </div>
-
-              <div className="btn-separator bg-secondary opacity-25"></div>
-
-              <div className="btn-container d-flex">
-                <Button
-                  disabled
-                  variant="link"
-                  className="p-0 text-decoration-none link-success">
-                  Compare with similar items
-                </Button>
-              </div>
+            <div className="d-flex">
+              <Button
+                variant="link"
+                className="p-0 text-decoration-none link-success"
+                onClick={removeFromBasket}>
+                Delete
+              </Button>
             </div>
-          )}
+
+            <div className="btn-separator bg-secondary opacity-25"></div>
+
+            <div className="d-flex">
+              <Button
+                disabled
+                variant="link"
+                className="p-0 text-decoration-none link-success">
+                Save for later
+              </Button>
+            </div>
+
+            <div className="btn-separator bg-secondary opacity-25"></div>
+
+            <div className="d-flex">
+              <Button
+                disabled
+                variant="link"
+                className="p-0 text-decoration-none link-success">
+                Compare with similar items
+              </Button>
+            </div>
+          </div>
         </div>
       </Stack>
 
       {/* Control buttons on small screens */}
-      {!hideButton && (
-        <div
-          id="cart-control-container"
-          className="d-sm-none"
-          style={{ fontSize: '.75rem' }}>
-          {isInput ? (
-            <Form
-              className="d-inline-block flex-column align-items-start"
-              onSubmit={handleQuantitySubmit}>
-              <Form.Control
-                ref={inputQuantityRef}
-                maxLength={3}
-                aria-label="Quantity"
-                autoComplete="false"
-                value={inputQuantity}
-                onChange={handleQuantityChange}
-                onFocus={() => setIsInputSubmitted(false)}
-              />
-              {inputQuantity && quantity !== Number(inputQuantity) && (
-                <Button
-                  type="submit"
-                  variant="warning"
-                  className="rounded-3 mt-2 w-100">
-                  Update
-                </Button>
-              )}
-            </Form>
-          ) : (
-            <ButtonGroup
-              size="sm"
-              aria-label="Product Quantity"
-              className="cart-quantity-controller">
+      <div
+        id="cart-control-container"
+        className="d-sm-none"
+        style={{ fontSize: '.75rem' }}>
+        {isInput ? (
+          <Form
+            className="d-inline-block flex-column align-items-start"
+            onSubmit={handleQuantitySubmit}>
+            <Form.Control
+              ref={inputQuantityRef}
+              maxLength={3}
+              aria-label="Quantity"
+              autoComplete="false"
+              value={inputQuantity}
+              onChange={handleQuantityChange}
+              onFocus={() => setIsInputSubmitted(false)}
+            />
+            {inputQuantity && quantity !== Number(inputQuantity) && (
               <Button
-                variant="light"
-                onClick={() =>
-                  quantity === 1
-                    ? removeFromBasket()
-                    : updateProduct({ quantity: quantity - 1 })
-                }>
-                {quantity === 1 ? <MdDeleteOutline /> : '-'}
+                type="submit"
+                variant="warning"
+                className="rounded-3 mt-2 w-100">
+                Update
               </Button>
-              <Button variant="light" onClick={() => setShowModal(true)}>
-                {quantity}
-              </Button>
-              <Button
-                variant="light"
-                onClick={() => updateProduct({ quantity: quantity + 1 })}>
-                {'+'}
-              </Button>
-            </ButtonGroup>
-          )}
-
-          <div className="btn-container d-inline-block">
+            )}
+          </Form>
+        ) : (
+          <ButtonGroup
+            size="sm"
+            aria-label="Product Quantity"
+            className="cart-quantity-controller">
             <Button
-              variant="link"
-              className="p-0 text-decoration-none"
-              onClick={removeFromBasket}>
-              Delete
+              variant="light"
+              onClick={() =>
+                quantity === 1
+                  ? removeFromBasket()
+                  : updateProduct({ quantity: quantity - 1 })
+              }>
+              {quantity === 1 ? <MdDeleteOutline /> : '-'}
             </Button>
-          </div>
-
-          <div className="btn-container d-inline-block">
+            <Button variant="light" onClick={() => setShowModal(true)}>
+              {quantity}
+            </Button>
             <Button
-              disabled
-              variant="link"
-              className="p-0 text-decoration-none">
-              Save for later
+              variant="light"
+              onClick={() => updateProduct({ quantity: quantity + 1 })}>
+              {'+'}
             </Button>
-          </div>
+          </ButtonGroup>
+        )}
 
-          <div className="btn-container d-inline-block">
-            <Button
-              disabled
-              variant="link"
-              className="p-0 text-decoration-none">
-              Compare with similar items
-            </Button>
-          </div>
+        <div className="btn-container d-inline-block">
+          <Button
+            variant="link"
+            className="p-0 text-decoration-none"
+            onClick={removeFromBasket}>
+            Delete
+          </Button>
+        </div>
 
-          <Modal
-            centered
-            scrollable
-            show={showModal}
-            aria-labelledby="Product Quantity"
-            className="quantity-modal w-50 top-50 start-50 translate-middle"
-            onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton className="px-4">
-              <Modal.Title as="h4" className="fs-6 fw-bold">
-                Quantity
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body className="p-0">
-              <ListGroup variant="flush">
-                <ListGroup.Item
-                  action
-                  eventKey="0"
-                  active={false}
-                  onClick={() => setShowModal(false) & removeFromBasket()}>
-                  0 (Delete)
-                </ListGroup.Item>
-                {Array(Math.min(9, inStock))
-                  .fill()
-                  .map((_, i) => (
-                    <ListGroup.Item
-                      action
-                      key={i}
-                      eventKey={i + 1}
-                      active={i + 1 === quantity}
-                      onClick={() =>
-                        setShowModal(false) & updateProduct({ quantity: i + 1 })
-                      }>
-                      {i + 1}
-                    </ListGroup.Item>
-                  ))}
-                {inStock > 9 && (
+        <div className="btn-container d-inline-block">
+          <Button disabled variant="link" className="p-0 text-decoration-none">
+            Save for later
+          </Button>
+        </div>
+
+        <div className="btn-container d-inline-block">
+          <Button disabled variant="link" className="p-0 text-decoration-none">
+            Compare with similar items
+          </Button>
+        </div>
+
+        <Modal
+          centered
+          scrollable
+          show={showModal}
+          aria-labelledby="Product Quantity"
+          className="quantity-modal w-50 top-50 start-50 translate-middle"
+          onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton className="px-4">
+            <Modal.Title as="h4" className="fs-6 fw-bold">
+              Quantity
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="p-0">
+            <ListGroup variant="flush">
+              <ListGroup.Item
+                action
+                eventKey="0"
+                active={false}
+                onClick={() => setShowModal(false) & removeFromBasket()}>
+                0 (Delete)
+              </ListGroup.Item>
+              {Array(Math.min(9, inStock))
+                .fill()
+                .map((_, i) => (
                   <ListGroup.Item
                     action
-                    eventKey="10"
-                    active={false}
-                    onClick={() => setShowModal(false) & setIsInput(true)}>
-                    10+
+                    key={i}
+                    eventKey={i + 1}
+                    active={i + 1 === quantity}
+                    onClick={() =>
+                      setShowModal(false) & updateProduct({ quantity: i + 1 })
+                    }>
+                    {i + 1}
                   </ListGroup.Item>
-                )}
-              </ListGroup>
-            </Modal.Body>
-          </Modal>
-        </div>
-      )}
+                ))}
+              {inStock > 9 && (
+                <ListGroup.Item
+                  action
+                  eventKey="10"
+                  active={false}
+                  onClick={() => setShowModal(false) & setIsInput(true)}>
+                  10+
+                </ListGroup.Item>
+              )}
+            </ListGroup>
+          </Modal.Body>
+        </Modal>
+      </div>
     </Stack>
   );
 }
