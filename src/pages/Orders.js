@@ -10,6 +10,10 @@ function Orders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    document.title = 'My orders';
+  }, []);
+
+  useEffect(() => {
     if (!user) return setOrders([]);
 
     const ordersRef = collection(db, 'users', user.uid, 'orders');
@@ -25,8 +29,8 @@ function Orders() {
   }, [user]);
 
   return (
-    <div className="orders">
-      <h1>Your Orders</h1>
+    <div className="orders col-10 mx-auto">
+      <h1>My Orders</h1>
       <div className="orders__order">
         {orders?.map(order => (
           <Order key={order.id} order={order} />

@@ -13,6 +13,10 @@ function Home() {
   }, []);
 
   useEffect(() => {
+    document.title = 'Amazon.com. Spend less. Smile more.';
+  }, []);
+
+  useEffect(() => {
     if (bannerRef.current == null) return;
     handleBannerMargin();
   }, [handleBannerMargin]);
