@@ -98,8 +98,8 @@ function CheckoutProduct({
         {/* Product info */}
         <div id="cart-product-info-container" className="ps-2 flex-grow-1">
           <Stack className="flex-sm-row align-items-start justify-content-between">
-            <p className="cart-product-title lh-sm mb-1">
-              {title.length > 85 ? title.slice(0, 85) + '...' : title}
+            <p className="cart-product-title lh-sm mb-1 truncate-lines lines-2">
+              {title}
             </p>
             <p
               style={{ fontSize: '1.2rem' }}

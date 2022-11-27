@@ -85,8 +85,8 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
           />
         </div>
         <Card.Body ref={productInfoRef} className="p-2">
-          <Card.Title className="fw-normal mb-1 fs-6">
-            {title.length > 75 ? title.slice(0, 75) + '...' : title}
+          <Card.Title className="fw-normal mb-1 fs-6 truncate-lines lines-2">
+            {title}
           </Card.Title>
           <Stack>
             <Stack direction="horizontal" className="mb-3">
