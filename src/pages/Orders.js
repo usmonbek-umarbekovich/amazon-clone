@@ -29,9 +29,9 @@ function Orders() {
   }, [user]);
 
   return (
-    <div className="orders col-10 mx-auto">
+    <div className="col-lg-9 col-md-11 px-sm-3 px-md-0 mx-auto">
       <h1>My Orders</h1>
-      <div className="orders__order">
+      <div>
         {orders?.map(order => (
           <Order key={order.id} order={order} />
         ))}
