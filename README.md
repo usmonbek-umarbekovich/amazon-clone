@@ -7,6 +7,6 @@
 `4242 4242 4242 4242 ...`
 
 The application has everything that regular e-commerce application has.
-It includes authentication, products, checkout, payment system and very similar design.
+It includes authentication, products, checkout, payment system and very similar design to actual amazon website.
 
 Site is live at https://clone-1764d.firebaseapp.com/
