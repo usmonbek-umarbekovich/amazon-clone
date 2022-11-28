@@ -183,7 +183,7 @@ function CheckoutProduct({
               <Dropdown>
                 <Dropdown.Toggle
                   size="sm"
-                  className="rounded-2 border-secondary text-dark">
+                  className="rounded-2 border-secondary border-opacity-25 text-dark">
                   Qty: <span className="mx-1">{quantity}</span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cart-product-quantity-menu">
