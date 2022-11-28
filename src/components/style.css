@@ -144,12 +144,16 @@
   font-size: 0.875rem;
 }
 
-#orders-navigation-section .nav-item h3 {
+#orders-navigation-section .nav-item h3,
+#orders-navigation-section .nav-item h3 + .nav-link {
   margin-bottom: 1px !important;
   line-height: inherit;
 }
 
 #orders-search-section form input {
+  padding: 0.8rem 0.5rem;
+  padding-left: 2.25rem;
+  font-size: 0.9375rem;
   border: 1px solid #ced4da;
   border-left: none;
   border-right: none;
@@ -162,7 +166,9 @@
 }
 
 #orders-search-section form input + svg {
-  color: var(--bs-primary);
+  left: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--bs-info);
 }
 
 #orders-section .order-container {
@@ -254,6 +260,9 @@
   }
 
   #orders-search-section form input {
+    padding: 0.25rem 0.5rem;
+    padding-left: 1.75rem;
+    font-size: 0.875rem;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
   }
@@ -263,6 +272,7 @@
   }
 
   #orders-search-section form input + svg {
+    font-size: 0.875rem;
     color: var(--bs-dark);
   }
 
