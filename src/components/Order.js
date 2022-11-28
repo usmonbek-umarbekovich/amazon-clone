@@ -10,7 +10,7 @@ function Order({ order }) {
   order.delivery_date = 'October 20, 2022';
 
   return (
-    <Card id="order-container" className="rounded-3 overflow-hidden mb-sm-4 mb-1">
+    <Card className="order-container rounded-3 overflow-hidden mb-sm-4 mb-1">
       <Card.Header
         style={{ lineHeight: 1, backgroundColor: '#F0F2F2' }}
         className="d-none d-sm-block p-0">
@@ -88,7 +88,7 @@ function Order({ order }) {
           </Col>
         </Row>
       </Card.Header>
-      <Card.Body style={{ padding: '0.875rem 1.125rem' }}>
+      <Card.Body>
         <Row className="flex-nowrap w-100 mx-auto">
           <Col className="ps-0">
             <h3
@@ -96,7 +96,7 @@ function Order({ order }) {
               className="d-none d-sm-block fw-bold m-0">
               Delivered on: {order.delivery_date}
             </h3>
-            <div className="mt-3 order-product-container">
+            <div className="mt-sm-3 order-product-container">
               {order.data.basket.map(p => (
                 <OrderProduct
                   key={p.id}
