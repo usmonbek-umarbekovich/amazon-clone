@@ -7,9 +7,8 @@ function Home() {
   const bannerRef = useRef();
 
   const handleBannerMargin = useCallback(() => {
-    setBannerMargin(
-      `-${bannerRef.current.getBoundingClientRect().height / 2}px`
-    );
+    const currHeight = (window.innerWidth * 7) / 19;
+    setBannerMargin(`-${currHeight / 2}px`);
   }, []);
 
   useEffect(() => {
@@ -17,17 +16,11 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (bannerRef.current == null) return;
-    handleBannerMargin();
+    if (bannerRef.current) handleBannerMargin();
   }, [handleBannerMargin]);
 
   useEffect(() => {
     const controller = new AbortController();
-
-    window.addEventListener('load', handleBannerMargin, {
-      once: true,
-      signal: controller.signal,
-    });
 
     window.addEventListener('resize', handleBannerMargin, {
       signal: controller.signal,
@@ -41,7 +34,7 @@ function Home() {
       <img
         ref={bannerRef}
         style={{ marginBottom: bannerMargin }}
-        className="home__image w-100"
+        className="home-image w-100 h-100"
         src="https://images-eu.ssl-images-amazon.com/images/G/02/digital/video/merch2016/Hero/Covid19/Generic/GWBleedingHero_ENG_COVIDUPDATE__XSite_1500x600_PV_en-GB._CB428684220_jpg"
         alt="Banner"
       />
