@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { useStateValue } from '../contexts/StateProvider';
+import { periods } from '../services/reducer';
 import { db } from '../config';
 import Order from '../components/Order';
 import Form from 'react-bootstrap/Form';
@@ -14,9 +15,51 @@ function Orders() {
   const [{ user }] = useStateValue();
   const [orders, setOrders] = useState([]);
   const [activeNavKey, setActiveNavKey] = useState('orders');
+  const [periodIndex, setPeriodIndex] = useState(1);
 
+  const haveArchive = useMemo(
+    () => orders.some(order => order.archived),
+    [orders]
+  );
+
+  const selectedOrders = useMemo(() => {
+    if (periods[periodIndex].name === 'year') {
+      return orders.filter(order => {
+        const date = new Date(order.data.created * 1000);
+        return date.getFullYear() === periods[periodIndex].value;
+      });
+    }
+
+    if (periods[periodIndex].name === 'month') {
+      return orders.filter(order => {
+        const date = new Date(order.data.created * 1000);
+        const curr = new Date();
+        const yearDiff = curr.getFullYear() - date.getFullYear();
+        const monthDiff = curr.getMonth() - date.getMonth();
+        return monthDiff + 12 * yearDiff < 3;
+      });
+    }
+
+    if (periods[periodIndex].name === 'day') {
+      return orders.filter(order => {
+        const date = new Date(order.data.created * 1000);
+        const curr = new Date();
+        const monthDiff = curr.getMonth() - date.getMonth();
+        const dayDiff = curr.getDate() - date.getDate();
+        return dayDiff + 30 * monthDiff < 30;
+      });
+    }
+
+    if (periods[periodIndex].name === 'archive') {
+      return orders.filter(order => order.archived);
+    }
+
+    return [...orders];
+  }, [orders, periodIndex]);
+
+  // Use Effects
   useEffect(() => {
-    document.title = 'My orders';
+    document.title = 'Your Orders';
   }, []);
 
   useEffect(() => {
@@ -41,12 +84,12 @@ function Orders() {
           <Breadcrumb>
             <Breadcrumb.Item
               href="#"
-              title="My account"
+              title="Your Account"
               linkProps={{ className: 'text-decoration-none link-success' }}>
-              My account
+              Your Account
             </Breadcrumb.Item>
-            <Breadcrumb.Item active title="My orders">
-              My orders
+            <Breadcrumb.Item active title="Your Orders">
+              Your Orders
             </Breadcrumb.Item>
           </Breadcrumb>
         </header>
@@ -55,7 +98,8 @@ function Orders() {
           id="orders-search-section"
           className="mb-sm-2 order-1 order-sm-0">
           <div className="d-flex align-items-center justify-content-between">
-            <h1 className="d-none d-sm-block fs-3">My orders</h1>
+            <h1 className="d-none d-sm-block fs-3">Your Orders</h1>
+            {/* TODO search orders */}
             <Form className="d-flex col-md-6 col-sm-8 col-12">
               <Form.Group
                 controlId="searchOrders"
@@ -65,10 +109,13 @@ function Orders() {
                   size="sm"
                   type="search"
                   name="orderName"
-                  placeholder="All orders"
+                  placeholder="Search all orders"
                   aria-label="Order name"
                 />
+
                 <FaSearch className="position-absolute top-50 translate-middle-y" />
+
+                {/* handle filtering orders */}
                 <Button
                   variant="link"
                   style={{ right: '0.5rem', fontSize: '0.875rem' }}
@@ -81,12 +128,13 @@ function Orders() {
                   <FaChevronRight style={{ fontSize: '0.9375rem' }} />
                 </Button>
               </Form.Group>
+
               <Button
                 size="sm"
                 variant="dark"
-                aria-labelledby="Search for order"
+                aria-label="Search Orders"
                 className="d-none d-sm-inline-block rounded-pill text-nowrap fw-bold">
-                Search for orders
+                Search Orders
               </Button>
             </Form>
           </div>
@@ -108,7 +156,7 @@ function Orders() {
                   <Nav.Link
                     eventKey="orders"
                     className="d-sm-none fw-bold border-bottom border-3 border-primary p-2">
-                    My orders
+                    Your Orders
                   </Nav.Link>
                 </>
               ) : (
@@ -116,7 +164,7 @@ function Orders() {
                   <span className="d-none d-sm-inline link-success">
                     Orders
                   </span>
-                  <span className="d-sm-none link-dark">My orders</span>
+                  <span className="d-sm-none link-dark">Your Orders</span>
                 </Nav.Link>
               )}
             </Nav.Item>
@@ -173,48 +221,151 @@ function Orders() {
           </Nav>
         </section>
 
-        <section id="orders-date-section" className="mb-sm-3 order-2">
+        <section id="orders-period-section" className="mb-sm-3 order-2">
           <div className="d-sm-none">
-            <p
-              style={{ fontSize: '0.8125rem' }}
-              className="text-secondary text-center fw-bold my-1">
-              Last three months
+            <p className="text-secondary text-center fw-bold my-1">
+              {periods[periodIndex].label}
             </p>
           </div>
+
           <div className="d-none d-sm-flex align-items-center">
             <p className="me-2 mb-0">
-              <span className="fw-bold">1 order</span> placed in
+              <span className="fw-bold">
+                {selectedOrders.length} order
+                {selectedOrders.length > 1 ? 's' : ''}
+              </span>{' '}
+              placed in
             </p>
+
             <Dropdown>
               <Dropdown.Toggle
                 size="sm"
+                aria-label="Choose a time period"
                 style={{
                   fontSize: '0.8125rem',
                   backgroundColor: '#f0f2f2',
                   boxShadow: '0 2px 5px 0 rgb(213 217 217 / 50%)',
                 }}
                 className="rounded-2 border-secondary border-opacity-25 text-dark">
-                last 3 months
+                {periods[periodIndex].label}
               </Dropdown.Toggle>
               <Dropdown.Menu className="cart-product-quantity-menu">
-                <Dropdown.Item eventKey="30-day">last 30 days</Dropdown.Item>
-                <Dropdown.Item eventKey="3-month">last 3 months</Dropdown.Item>
-                <Dropdown.Item eventKey="2022-year">2022</Dropdown.Item>
-                <Dropdown.Item eventKey="2021-year">2021</Dropdown.Item>
-                <Dropdown.Item eventKey="2020-year">2020</Dropdown.Item>
-                <Dropdown.Item eventKey="archive">
-                  Archived orders
-                </Dropdown.Item>
+                {periods.slice(0, periods.length - 1).map((p, idx) => (
+                  <Dropdown.Item
+                    key={idx}
+                    eventKey={idx}
+                    active={periodIndex === idx}
+                    onClick={() => setPeriodIndex(idx)}>
+                    {p.label}
+                  </Dropdown.Item>
+                ))}
+                {haveArchive && (
+                  <Dropdown.Item
+                    eventKey={periods.length - 1}
+                    active={periodIndex === periods.length - 1}
+                    onClick={() => setPeriodIndex(periods.length - 1)}>
+                    Archived orders
+                  </Dropdown.Item>
+                )}
               </Dropdown.Menu>
             </Dropdown>
           </div>
         </section>
 
-        <section id="orders-section" className="order-last border-top border-2">
-          {orders?.map(order => (
-            <Order key={order.id} order={order} />
-          ))}
-        </section>
+        {activeNavKey === 'orders' && (
+          <section
+            id="orders-section"
+            className="order-last border-top border-2">
+            {selectedOrders.map(order => (
+              <Order key={order.id} order={order} />
+            ))}
+            {selectedOrders.length === 0 && (
+              <div
+                style={{ fontSize: '0.875rem' }}
+                className="text-center pt-sm-3 px-2 py-5">
+                <span>
+                  You have not placed any orders in {periods[periodIndex].label}
+                  .
+                </span>{' '}
+                {(periodIndex < periods.length - 2 ||
+                  (periodIndex === periods.length - 2 && haveArchive)) && (
+                  <Button
+                    variant="link"
+                    className="text-decoration-none p-0 pb-1"
+                    onClick={() => setPeriodIndex(periodIndex + 1)}>
+                    View orders in {periods[periodIndex + 1].label}
+                  </Button>
+                )}
+              </div>
+            )}
+          </section>
+        )}
+
+        {activeNavKey === 'buy-again' && (
+          <section
+            id="buy-again-section"
+            className="order-last border-top border-2">
+            {/* TODO show relevant items */}
+            <div
+              style={{ fontSize: '0.875rem' }}
+              className="text-center pt-sm-3 px-2 py-5">
+              <span>
+                There are no recommended items for you to buy again at this
+                time. Check
+              </span>{' '}
+              <Button
+                variant="link"
+                className="text-decoration-none p-0 pb-1"
+                onClick={() => setActiveNavKey('orders')}>
+                Your Orders
+              </Button>{' '}
+              <span>for items you previously purchased.</span>
+            </div>
+          </section>
+        )}
+
+        {activeNavKey === 'not-shipped-yet' && (
+          <section
+            id="not-shipped-yet-section"
+            className="order-last border-top border-2">
+            {/* TODO show relevant items */}
+            <div
+              style={{ fontSize: '0.875rem' }}
+              className="text-center pt-sm-3 px-2 py-5">
+              <span>
+                Looking for an order? All of your orders have shipped.
+              </span>{' '}
+              <Button
+                variant="link"
+                className="text-decoration-none p-0 pb-1"
+                onClick={() => setActiveNavKey('orders')}>
+                View all orders
+              </Button>
+            </div>
+          </section>
+        )}
+
+        {activeNavKey === 'canceled-orders' && (
+          <section
+            id="canceled-orders-section"
+            className="order-last border-top border-2">
+            {/* TODO show relevant items */}
+            <div
+              style={{ fontSize: '0.875rem' }}
+              className="text-center pt-sm-3 px-2 py-5">
+              <span>
+                We aren't finding any cancelled orders (for orders placed in the
+                last 6 months).
+              </span>{' '}
+              <Button
+                variant="link"
+                className="text-decoration-none p-0 pb-1"
+                onClick={() => setActiveNavKey('orders')}>
+                View all orders
+              </Button>
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );
