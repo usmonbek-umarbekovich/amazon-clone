@@ -172,13 +172,9 @@
 }
 
 #orders-section .order-container {
-  border: none !important;
-  border-radius: 0 !important;
-}
-
-#orders-section .order-container {
   --bs-border-opacity: 0.25;
   --bs-border-width: 1px;
+  border: none !important;
   border-bottom: var(--bs-border-width) var(--bs-border-style) !important;
   border-color: rgba(var(--bs-dark-rgb), var(--bs-border-opacity)) !important;
 }
@@ -202,11 +198,27 @@
   font-size: 0.8125rem !important;
 }
 
-.order-container .delivery-address-modal::before {
+.order-product-container .order-product {
+  height: 4rem;
+}
+
+.order-product-container .order-product:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.popup-body {
+  font-size: 0.875rem;
+  margin-top: -0.15rem;
+  min-width: 15rem;
+  z-index: 900;
+  --icon-left: 50%;
+}
+
+.popup-body::before {
   content: '';
   position: absolute;
-  top: -0.4rem;
-  left: 50%;
+  top: -0.425rem;
+  left: var(--icon-left);
   transform: translateX(-50%) rotate(45deg);
 
   width: 0.8rem;
@@ -217,12 +229,18 @@
   border-bottom: none;
 }
 
-.order-product-container .order-product {
-  height: 4rem;
+.popup-body .btn-close-container {
+  font-size: 0.75rem;
+  margin-top: -0.45rem;
+  margin-left: 0.35rem;
 }
 
-.order-product-container .order-product:not(:last-child) {
-  margin-bottom: 1rem;
+.popup-toggle {
+  margin-top: -0.35rem;
+}
+
+.popup-toggle-icon {
+  font-size: 0.5rem;
 }
 
 @media (min-width: 576px) {
@@ -299,12 +317,29 @@
   }
 
   #orders-section .order-container {
-    border: var(--bs-card-border-width) solid var(--bs-card-border-color) !important;
-    border-radius: var(--bs-border-radius-lg) !important;
+    border: none !important;
+  }
+
+  .order-container .card-header,
+  .order-container .card-body,
+  .order-container .card-footer {
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+  }
+
+  .order-container .card-header {
+    border-top-left-radius: var(--bs-border-radius-lg) !important;
+    border-top-right-radius: var(--bs-border-radius-lg) !important;
   }
 
   .order-container .card-body {
     padding: 0.875rem 1.125rem;
+    border-top: none;
+    border-bottom: none;
+  }
+
+  .order-container .card-footer {
+    border-bottom-left-radius: var(--bs-border-radius-lg) !important;
+    border-bottom-right-radius: var(--bs-border-radius-lg) !important;
   }
 
   .order-product-container .order-product {

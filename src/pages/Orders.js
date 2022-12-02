@@ -58,6 +58,7 @@ function Orders() {
   }, [orders, periodIndex]);
 
   // Use Effects
+  // TODO dynamic title on nav change
   useEffect(() => {
     document.title = 'Your Orders';
   }, []);
@@ -221,56 +222,58 @@ function Orders() {
           </Nav>
         </section>
 
-        <section id="orders-period-section" className="mb-sm-3 order-2">
-          <div className="d-sm-none">
-            <p className="text-secondary text-center fw-bold my-1">
-              {periods[periodIndex].label}
-            </p>
-          </div>
-
-          <div className="d-none d-sm-flex align-items-center">
-            <p className="me-2 mb-0">
-              <span className="fw-bold">
-                {selectedOrders.length} order
-                {selectedOrders.length > 1 ? 's' : ''}
-              </span>{' '}
-              placed in
-            </p>
-
-            <Dropdown>
-              <Dropdown.Toggle
-                size="sm"
-                aria-label="Choose a time period"
-                style={{
-                  fontSize: '0.8125rem',
-                  backgroundColor: '#f0f2f2',
-                  boxShadow: '0 2px 5px 0 rgb(213 217 217 / 50%)',
-                }}
-                className="rounded-2 border-secondary border-opacity-25 text-dark">
+        {activeNavKey === 'orders' && (
+          <section id="orders-period-section" className="mb-sm-3 order-2">
+            <div className="d-sm-none">
+              <p className="text-secondary text-center fw-bold my-1">
                 {periods[periodIndex].label}
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="cart-product-quantity-menu">
-                {periods.slice(0, periods.length - 1).map((p, idx) => (
-                  <Dropdown.Item
-                    key={idx}
-                    eventKey={idx}
-                    active={periodIndex === idx}
-                    onClick={() => setPeriodIndex(idx)}>
-                    {p.label}
-                  </Dropdown.Item>
-                ))}
-                {haveArchive && (
-                  <Dropdown.Item
-                    eventKey={periods.length - 1}
-                    active={periodIndex === periods.length - 1}
-                    onClick={() => setPeriodIndex(periods.length - 1)}>
-                    Archived orders
-                  </Dropdown.Item>
-                )}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </section>
+              </p>
+            </div>
+
+            <div className="d-none d-sm-flex align-items-center">
+              <p className="me-2 mb-0">
+                <span className="fw-bold">
+                  {selectedOrders.length} order
+                  {selectedOrders.length > 1 ? 's' : ''}
+                </span>{' '}
+                placed in
+              </p>
+
+              <Dropdown>
+                <Dropdown.Toggle
+                  size="sm"
+                  aria-label="Choose a time period"
+                  style={{
+                    fontSize: '0.8125rem',
+                    backgroundColor: '#f0f2f2',
+                    boxShadow: '0 2px 5px 0 rgb(213 217 217 / 50%)',
+                  }}
+                  className="rounded-2 border-secondary border-opacity-25 text-dark">
+                  {periods[periodIndex].label}
+                </Dropdown.Toggle>
+                <Dropdown.Menu className="cart-product-quantity-menu">
+                  {periods.slice(0, periods.length - 1).map((p, idx) => (
+                    <Dropdown.Item
+                      key={idx}
+                      eventKey={idx}
+                      active={periodIndex === idx}
+                      onClick={() => setPeriodIndex(idx)}>
+                      {p.label}
+                    </Dropdown.Item>
+                  ))}
+                  {haveArchive && (
+                    <Dropdown.Item
+                      eventKey={periods.length - 1}
+                      active={periodIndex === periods.length - 1}
+                      onClick={() => setPeriodIndex(periods.length - 1)}>
+                      Archived orders
+                    </Dropdown.Item>
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
+          </section>
+        )}
 
         {activeNavKey === 'orders' && (
           <section
