@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import moment from 'moment';
 import CurrencyFormat from 'react-currency-format';
 import OrderProduct from './OrderProduct';
@@ -5,9 +6,40 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { FaChevronDown } from 'react-icons/fa';
 
 function Order({ order }) {
-  order.delivery_date = 'October 20, 2022';
+  const [showAddress, setShowAddress] = useState(false);
+  const addressTimeoutRef = useRef();
+
+  const handleShowAddress = () => {
+    clearTimeout(addressTimeoutRef.current);
+    setShowAddress(true);
+  };
+
+  const handleHideAddress = () => {
+    addressTimeoutRef.current = setTimeout(() => {
+      setShowAddress(false);
+    }, 500);
+  };
+
+  // TODO remove dummy data
+  order.delivery = {
+    recipient: 'Usmonbek Rustamov',
+    date: 'October 20, 2022',
+    address: {
+      street: 'Olive St.',
+      building: '13',
+      apartment: '57',
+      floor: '4',
+      zip: '04127',
+      city: 'California',
+      country: 'USA',
+      phone: '(209) 555-5555',
+    },
+  };
+
+  const { recipient, date: delivery_date, address } = order.delivery;
 
   return (
     <Card className="order-container rounded-3 overflow-hidden mb-sm-4 mb-1">
@@ -52,7 +84,7 @@ function Order({ order }) {
                   prefix="USD "
                 />
               </Col>
-              <Col className="d-none d-md-block col-auto">
+              <Col className="d-none d-md-block col-auto position-relative">
                 <p
                   style={{ fontSize: '0.75rem' }}
                   className="text-nowrap text-uppercase mb-2">
@@ -60,9 +92,47 @@ function Order({ order }) {
                 </p>
                 <Button
                   variant="link"
-                  className="text-nowrap text-decoration-none p-0 mb-0">
-                  Usmonbek Rustamov
+                  style={{ marginTop: '-0.35rem' }}
+                  aria-label="Show delivery address"
+                  className="text-nowrap text-decoration-none p-0 pb-2 mb-0"
+                  onClick={handleShowAddress}
+                  onMouseEnter={handleShowAddress}
+                  onMouseLeave={handleHideAddress}>
+                  {recipient}{' '}
+                  <FaChevronDown
+                    style={{ fontSize: '0.5rem' }}
+                    className="link-secondary mb-2"
+                  />
                 </Button>
+                <div
+                  hidden={!showAddress}
+                  aria-label="Delivery address"
+                  style={{
+                    marginTop: '-0.15rem',
+                    minWidth: '15rem',
+                    zIndex: '900',
+                  }}
+                  className="delivery-address-modal position-absolute top-100 start-50 translate-middle-x bg-white border rounded-3 p-3"
+                  onMouseEnter={handleShowAddress}
+                  onMouseLeave={handleHideAddress}>
+                  <div style={{ fontSize: '0.875rem' }}>
+                    <p className="text-nowrap mb-2 fw-bold">{recipient}</p>
+                    <p className="text-nowrap mb-2">
+                      {address.street} {address.building}
+                    </p>
+                    <p className="text-nowrap mb-2">
+                      {address.apartment && `No. ${address.apartment}`}
+                      {address.floor && `, Floor ${address.floor}`}
+                    </p>
+                    <p className="text-nowrap mb-2">
+                      {address.zip} {address.city}
+                    </p>
+                    <p className="text-nowrap mb-2">{address.country}</p>
+                    <p className="text-nowrap mb-0">
+                      Phone number: {address.phone}
+                    </p>
+                  </div>
+                </div>
               </Col>
             </Row>
           </Col>
@@ -73,6 +143,7 @@ function Order({ order }) {
               <p className="text-uppercase mb-2">{order.id.slice(7)}</p>
             </div>
             <div className="d-flex align-items-center">
+              {/* TODO handle showing order details */}
               <Button variant="link" className="text-decoration-none p-0">
                 View order details
               </Button>
@@ -81,6 +152,7 @@ function Order({ order }) {
                 className="btn-separator bg-secondary opacity-25"
                 style={{ height: '1rem' }}></div>
 
+              {/* TODO handle showing invoice info */}
               <Button variant="link" className="text-decoration-none p-0">
                 Invoice
               </Button>
@@ -91,10 +163,11 @@ function Order({ order }) {
       <Card.Body>
         <Row className="flex-nowrap w-100 mx-auto">
           <Col className="ps-0">
+            {/* TODO show relevant delivery date */}
             <h3
               style={{ fontSize: '1.125rem' }}
               className="d-none d-sm-block fw-bold m-0">
-              Delivered on: {order.delivery_date}
+              Delivered on: {delivery_date}
             </h3>
             <div className="mt-sm-3 order-product-container">
               {order.data.basket.map(p => (
@@ -104,13 +177,14 @@ function Order({ order }) {
                   title={p.title}
                   image={p.image}
                   returnBy={p.returnBy}
-                  deliveryDate={order.delivery_date}
+                  deliveryDate={delivery_date}
                 />
               ))}
             </div>
           </Col>
           <Col className="d-none d-md-block col-auto mt-3 pe-0">
             <div className="btn-container py-1 m-0 mb-3">
+              {/* TODO handle track the shipment */}
               <Button
                 variant="link"
                 className="text-reset text-center text-nowrap text-decoration-none border-0 w-100 p-0">
@@ -118,6 +192,7 @@ function Order({ order }) {
               </Button>
             </div>
             <div className="btn-container py-1 m-0 mb-1">
+              {/* TODO handle feedback */}
               <Button
                 variant="link"
                 className="text-reset text-center text-nowrap text-decoration-none border-0 w-100 p-0">
@@ -125,6 +200,7 @@ function Order({ order }) {
               </Button>
             </div>
             <div className="btn-container py-1 m-0">
+              {/* TODO handle writing product review */}
               <Button
                 variant="link"
                 className="text-reset text-center text-nowrap text-decoration-none border-0 w-100 p-0">
@@ -137,8 +213,9 @@ function Order({ order }) {
       <Card.Footer
         style={{ padding: '0.875rem 1.125rem' }}
         className="d-none d-sm-block bg-white">
+        {/* TODO handle archiving the order */}
         <Button variant="link" className="text-decoration-none p-0">
-          Archive the order
+          {order.archived ? 'Archive the order' : 'Restore order from archive'}
         </Button>
       </Card.Footer>
     </Card>

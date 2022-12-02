@@ -202,6 +202,21 @@
   font-size: 0.8125rem !important;
 }
 
+.order-container .delivery-address-modal::before {
+  content: '';
+  position: absolute;
+  top: -0.4rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: #fff;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+  border-right: none;
+  border-bottom: none;
+}
+
 .order-product-container .order-product {
   height: 4rem;
 }
@@ -276,7 +291,10 @@
     color: var(--bs-dark);
   }
 
-  #orders-section {
+  #orders-section,
+  #buy-again-section,
+  #not-shipped-yet-section,
+  #canceled-orders-section {
     border-top: none !important;
   }
 
