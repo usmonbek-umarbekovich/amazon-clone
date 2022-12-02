@@ -1,28 +1,14 @@
-import { useState, useRef } from 'react';
 import moment from 'moment';
 import CurrencyFormat from 'react-currency-format';
 import OrderProduct from './OrderProduct';
+import Popup from './Popup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { FaChevronDown } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function Order({ order }) {
-  const [showAddress, setShowAddress] = useState(false);
-  const addressTimeoutRef = useRef();
-
-  const handleShowAddress = () => {
-    clearTimeout(addressTimeoutRef.current);
-    setShowAddress(true);
-  };
-
-  const handleHideAddress = () => {
-    addressTimeoutRef.current = setTimeout(() => {
-      setShowAddress(false);
-    }, 500);
-  };
-
   // TODO remove dummy data
   order.delivery = {
     recipient: 'Usmonbek Rustamov',
@@ -42,7 +28,7 @@ function Order({ order }) {
   const { recipient, date: delivery_date, address } = order.delivery;
 
   return (
-    <Card className="order-container rounded-3 overflow-hidden mb-sm-4 mb-1">
+    <Card className="order-container border-bottom border-1 rounded-0 mb-sm-4 mb-1">
       <Card.Header
         style={{ lineHeight: 1, backgroundColor: '#F0F2F2' }}
         className="d-none d-sm-block p-0">
@@ -84,55 +70,45 @@ function Order({ order }) {
                   prefix="USD "
                 />
               </Col>
-              <Col className="d-none d-md-block col-auto position-relative">
+              <Col className="d-none d-md-block col-auto">
                 <p
                   style={{ fontSize: '0.75rem' }}
                   className="text-nowrap text-uppercase mb-2">
                   Delivery Address
                 </p>
-                <Button
-                  variant="link"
-                  style={{ marginTop: '-0.35rem' }}
-                  aria-label="Show delivery address"
-                  className="text-nowrap text-decoration-none p-0 pb-2 mb-0"
-                  onClick={handleShowAddress}
-                  onMouseEnter={handleShowAddress}
-                  onMouseLeave={handleHideAddress}>
-                  {recipient}{' '}
-                  <FaChevronDown
-                    style={{ fontSize: '0.5rem' }}
-                    className="link-secondary mb-2"
-                  />
-                </Button>
-                <div
-                  hidden={!showAddress}
-                  aria-label="Delivery address"
-                  style={{
-                    marginTop: '-0.15rem',
-                    minWidth: '15rem',
-                    zIndex: '900',
-                  }}
-                  className="delivery-address-modal position-absolute top-100 start-50 translate-middle-x bg-white border rounded-3 p-3"
-                  onMouseEnter={handleShowAddress}
-                  onMouseLeave={handleHideAddress}>
-                  <div style={{ fontSize: '0.875rem' }}>
-                    <p className="text-nowrap mb-2 fw-bold">{recipient}</p>
-                    <p className="text-nowrap mb-2">
-                      {address.street} {address.building}
-                    </p>
-                    <p className="text-nowrap mb-2">
-                      {address.apartment && `No. ${address.apartment}`}
-                      {address.floor && `, Floor ${address.floor}`}
-                    </p>
-                    <p className="text-nowrap mb-2">
-                      {address.zip} {address.city}
-                    </p>
-                    <p className="text-nowrap mb-2">{address.country}</p>
-                    <p className="text-nowrap mb-0">
-                      Phone number: {address.phone}
-                    </p>
-                  </div>
-                </div>
+                <Popup>
+                  <Popup.Toggle
+                    showOnClick
+                    showOnMouseEnter
+                    hideOnMouseLeave
+                    aria-label="Show delivery address"
+                    className="link-success">
+                    {recipient}
+                  </Popup.Toggle>
+                  <Popup.Body
+                    showOnMouseEnter
+                    hideOnMouseLeave
+                    aria-label="Delivery address"
+                    className="start-50 translate-middle-x">
+                    <div>
+                      <p className="text-nowrap mb-2 fw-bold">{recipient}</p>
+                      <p className="text-nowrap mb-2">
+                        {address.street} {address.building}
+                      </p>
+                      <p className="text-nowrap mb-2">
+                        {address.apartment && `No. ${address.apartment}`}
+                        {address.floor && `, Floor ${address.floor}`}
+                      </p>
+                      <p className="text-nowrap mb-2">
+                        {address.zip} {address.city}
+                      </p>
+                      <p className="text-nowrap mb-2">{address.country}</p>
+                      <p className="text-nowrap mb-0">
+                        Phone number: {address.phone}
+                      </p>
+                    </div>
+                  </Popup.Body>
+                </Popup>
               </Col>
             </Row>
           </Col>
@@ -144,18 +120,48 @@ function Order({ order }) {
             </div>
             <div className="d-flex align-items-center">
               {/* TODO handle showing order details */}
-              <Button variant="link" className="text-decoration-none p-0">
+              <Button
+                variant="link"
+                className="link-success text-decoration-none p-0 pb-2"
+                style={{ marginTop: '-0.35rem' }}>
                 View order details
               </Button>
 
               <div
                 className="btn-separator bg-secondary opacity-25"
-                style={{ height: '1rem' }}></div>
+                style={{ height: '1rem', marginTop: '-0.75rem' }}></div>
 
-              {/* TODO handle showing invoice info */}
-              <Button variant="link" className="text-decoration-none p-0">
-                Invoice
-              </Button>
+              <Popup>
+                <Popup.Toggle
+                  showOnClick
+                  aria-label="Show invoice info"
+                  className="link-success"
+                  iconClassName="text-secondary">
+                  Invoice
+                </Popup.Toggle>
+                <Popup.Body
+                  closeButton
+                  aria-label="Invoice info"
+                  style={{ right: '-2rem', '--icon-left': '72.5%' }}>
+                  <ul className="lh-base ps-3 mb-0">
+                    <li>
+                      <Link className="link-success text-decoration-none">
+                        Order summary
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="link-success text-decoration-none">
+                        invoice 1
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="link-success text-decoration-none">
+                        Request an invoice from a reseller
+                      </Link>
+                    </li>
+                  </ul>
+                </Popup.Body>
+              </Popup>
             </div>
           </Col>
         </Row>
@@ -214,8 +220,10 @@ function Order({ order }) {
         style={{ padding: '0.875rem 1.125rem' }}
         className="d-none d-sm-block bg-white">
         {/* TODO handle archiving the order */}
-        <Button variant="link" className="text-decoration-none p-0">
-          {order.archived ? 'Archive the order' : 'Restore order from archive'}
+        <Button
+          variant="link"
+          className="link-success text-decoration-none p-0">
+          {order.archived ? 'Restore order from archive' : 'Archive the order'}
         </Button>
       </Card.Footer>
     </Card>
