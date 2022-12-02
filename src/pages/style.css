@@ -1,5 +1,15 @@
-.home__image {
+.home-image {
+  vertical-align: top;
+  aspect-ratio: 19 / 7;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+}
+
+#orders-period-section .d-sm-none p {
+  font-size: 0.8125rem;
+}
+
+#orders-period-section .d-sm-none p::first-letter {
+  text-transform: uppercase;
 }
 
 .login {
