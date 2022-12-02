@@ -19,12 +19,14 @@ function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
       </Col>
       <Col className="d-flex flex-column">
         <div className="d-none d-sm-block">
+          {/* TODO redirect to product page */}
           <Link
             to="#"
             style={{ fontSize: '0.875rem' }}
-            className="text-decoration-none truncate-lines lines-2">
+            className="link-success text-decoration-none truncate-lines lines-2">
             {title}
           </Link>
+          {/* TODO add data dynamically */}
           <p style={{ fontSize: '0.75rem' }}>
             The return period expires on {returnBy}
           </p>
@@ -36,6 +38,7 @@ function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
             className="fw-bold truncate-lines lines-1 mb-1">
             {title}
           </h2>
+          {/* TODO handle delivery date */}
           <p style={{ fontSize: '0.85rem' }} className="mb-0">
             Delivered on: {deliveryDate}
           </p>
@@ -43,6 +46,7 @@ function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
 
         <div className="d-none d-sm-flex flex-wrap">
           <div className="btn-container bg-warning border-warning py-1 m-0 me-1 mb-1">
+            {/* TODO handle buying the product again */}
             <Button
               variant="link"
               className="text-reset text-center text-decoration-none border-0 w-100 ps-1 p-0">
@@ -56,7 +60,8 @@ function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
               <span>Buy this product again</span>
             </Button>
           </div>
-          <div className="btn-container py-1 m-0">
+          <div className="btn-container py-1 m-0 me-1 mb-1">
+            {/* TODO handle viewing the product */}
             <Button
               variant="link"
               className="text-reset text-center text-decoration-none border-0 w-100 p-0">
@@ -66,6 +71,7 @@ function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
         </div>
       </Col>
       <Col className="d-sm-none col-auto px-0">
+        {/* TODO handle showing order/product info */}
         <Link to="#" className="stretched-link text-reset">
           <BsChevronRight />
         </Link>
