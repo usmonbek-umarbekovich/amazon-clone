@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { periods } from '../services/reducer';
 import FormCheck from 'react-bootstrap/FormCheck';
 import Modal from 'react-bootstrap/Modal';
@@ -15,8 +15,13 @@ function OrderFilterModal({
   setActiveNavKey,
   setPeriodIndex,
 }) {
-  const [orderType, setOrderType] = useState(orderTypeInitial);
-  const [orderDateIndex, setOrderDateIndex] = useState(orderDateIndexInitial);
+  const [orderType, setOrderType] = useState();
+  const [orderDateIndex, setOrderDateIndex] = useState();
+
+  useEffect(() => {
+    setOrderType(orderTypeInitial);
+    setOrderDateIndex(orderDateIndexInitial);
+  }, [orderTypeInitial, orderDateIndexInitial]);
 
   const handleApply = () => {
     setActiveNavKey(orderType);

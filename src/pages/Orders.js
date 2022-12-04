@@ -74,6 +74,9 @@ function Orders() {
       case 'canceled-orders':
         document.title = 'Canceled Orders';
         break;
+      default:
+        document.title = 'Amazon.com. Spend less. Smile more.';
+        break;
     }
   }, [activeNavKey]);
 
@@ -371,8 +374,11 @@ function Orders() {
               style={{ fontSize: '0.875rem' }}
               className="text-center pt-sm-3 px-2 py-5">
               <span>
-                We aren't finding any cancelled orders (for orders placed in the
-                last 6 months).
+                We aren't finding any cancelled orders (for orders placed in{' '}
+                {periods[periodIndex].label.startsWith('last')
+                  ? `the ${periods[periodIndex].label}`
+                  : periods[periodIndex].label}
+                ).
               </span>{' '}
               <Button
                 variant="link"
