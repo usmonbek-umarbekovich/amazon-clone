@@ -4,6 +4,7 @@ import { useStateValue } from '../contexts/StateProvider';
 import { periods } from '../services/reducer';
 import { db } from '../config';
 import Order from '../components/Order';
+import OrderFilterModal from '../components/OrderFilterModal';
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -16,6 +17,7 @@ function Orders() {
   const [orders, setOrders] = useState([]);
   const [activeNavKey, setActiveNavKey] = useState('orders');
   const [periodIndex, setPeriodIndex] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
 
   const haveArchive = useMemo(
     () => orders.some(order => order.archived),
@@ -58,10 +60,22 @@ function Orders() {
   }, [orders, periodIndex]);
 
   // Use Effects
-  // TODO dynamic title on nav change
   useEffect(() => {
-    document.title = 'Your Orders';
-  }, []);
+    switch (activeNavKey) {
+      case 'orders':
+        document.title = 'Your Orders';
+        break;
+      case 'buy-again':
+        document.title = 'Buy Again';
+        break;
+      case 'not-shipped-yet':
+        document.title = 'Not Shipped Yet';
+        break;
+      case 'canceled-orders':
+        document.title = 'Canceled Orders';
+        break;
+    }
+  }, [activeNavKey]);
 
   useEffect(() => {
     if (!user) return setOrders([]);
@@ -116,11 +130,11 @@ function Orders() {
 
                 <FaSearch className="position-absolute top-50 translate-middle-y" />
 
-                {/* handle filtering orders */}
                 <Button
                   variant="link"
                   style={{ right: '0.5rem', fontSize: '0.875rem' }}
-                  className="d-sm-none position-absolute top-50 translate-middle-y p-2 pe-0 text-reset text-decoration-none border-start bg-white">
+                  className="d-sm-none position-absolute top-50 translate-middle-y p-2 pe-0 text-reset text-decoration-none border-start bg-white"
+                  onClick={() => setShowFilters(true)}>
                   <span
                     style={{ fontSize: '0.9375rem' }}
                     className="me-2 fw-semibold">
@@ -370,6 +384,17 @@ function Orders() {
           </section>
         )}
       </div>
+
+      {/* Filters window (on small screens) */}
+      <OrderFilterModal
+        show={showFilters}
+        haveArchive={haveArchive}
+        orderTypeInitial={activeNavKey}
+        orderDateIndexInitial={periodIndex}
+        setActiveNavKey={setActiveNavKey}
+        setPeriodIndex={setPeriodIndex}
+        onHide={() => setShowFilters(false)}
+      />
     </main>
   );
 }
