@@ -21,7 +21,6 @@ function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
         <div className="d-none d-sm-block">
           {/* TODO redirect to product page */}
           <Link
-            to="#"
             style={{ fontSize: '0.875rem' }}
             className="link-success text-decoration-none truncate-lines lines-2">
             {title}
