@@ -169,7 +169,6 @@ function Order({ order }) {
       <Card.Body>
         <Row className="flex-nowrap w-100 mx-auto">
           <Col className="ps-0">
-            {/* TODO show relevant delivery date */}
             <h3
               style={{ fontSize: '1.125rem' }}
               className="d-none d-sm-block fw-bold m-0">
