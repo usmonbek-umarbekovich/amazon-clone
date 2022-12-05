@@ -123,7 +123,7 @@ export const periods = [
   ...[new Date().getFullYear(), 0, 0].map((_, i, arr) => ({
     value: arr[0] - i,
     name: 'year',
-    label: arr[0] - i,
+    label: String(arr[0] - i),
   })),
   {
     value: '',
