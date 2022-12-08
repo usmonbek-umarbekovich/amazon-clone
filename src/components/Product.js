@@ -4,10 +4,21 @@ import { useStateValue } from '../contexts/StateProvider';
 import Stack from 'react-bootstrap/Stack';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import { FaStar, FaStarHalfAlt, FaMinus, FaPlus } from 'react-icons/fa';
 
-function Product({ id, title, image, price, ratings, actualPrice }) {
+function Product({
+  id,
+  inStock,
+  price,
+  actualPrice,
+  ratings,
+  title,
+  image,
+  highlights,
+}) {
   const [imageHeight, setImageHeight] = useState('100%');
+  const [quantity, setQuantity] = useState(0);
   const productInfoRef = useRef();
   const dispatch = useStateValue()[1];
 
@@ -20,7 +31,7 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
     const controller = new AbortController();
     window.addEventListener(
       'resize',
-      e => {
+      () => {
         if (window.innerWidth >= 576) return;
         setImageHeight(
           `${productInfoRef.current.getBoundingClientRect().height}px`
@@ -36,12 +47,17 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
       type: 'ADD_TO_BASKET',
       payload: {
         id,
+        inStock,
+        price,
+        quantity,
         title,
         image,
-        price,
+        highlights,
         selected: true,
+        isGift: false,
       },
     });
+    setQuantity(0);
   };
 
   const [ratingDecimal, ratingFraction] = useMemo(() => {
@@ -84,10 +100,11 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
             alt={title}
           />
         </div>
-        <Card.Body ref={productInfoRef} className="p-2">
+        <Card.Body ref={productInfoRef} className="d-flex flex-column p-2">
           <Card.Title className="fw-normal mb-1 fs-6 truncate-lines lines-2">
             {title}
           </Card.Title>
+
           <Stack>
             <Stack direction="horizontal" className="mb-3">
               <Stack direction="horizontal" className="me-2">
@@ -107,7 +124,8 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
                 {ratings.reduce((prev, curr) => prev + curr)}
               </Link>
             </Stack>
-            <Stack direction="horizontal" className="align-items-end mb-2">
+
+            <Stack direction="horizontal" className="align-items-end">
               <p className="d-flex align-items-start me-1">
                 <small style={{ lineHeight: 0.7 }}>$</small>
                 <strong
@@ -127,10 +145,47 @@ function Product({ id, title, image, price, ratings, actualPrice }) {
                 </p>
               )}
             </Stack>
+
+            <Stack className="mb-2">
+              {Object.entries(highlights).map(([key, value]) => (
+                <div key={key} className="d-flex">
+                  <p className="fw-bold me-1 mb-0 text-capitalize">{key}:</p>
+                  <p className="m-0">{value}</p>
+                </div>
+              ))}
+            </Stack>
           </Stack>
-          <Button variant="warning" className="rounded-0" onClick={addToBasket}>
-            Add to Basket
-          </Button>
+          <Stack
+            direction="horizontal"
+            className="align-items-center justify-content-between flex-wrap">
+            <ButtonGroup aria-label="Product Quantity" className="me-2 mb-2">
+              <Button
+                variant="warning"
+                aria-disabled={quantity === 0}
+                disabled={quantity === 0}
+                className="rounded-0"
+                onClick={() => setQuantity(prev => prev - 1)}>
+                <FaMinus />
+              </Button>
+              <Button variant="light" className="fs-5 fw-bold py-0 px-3">
+                {quantity}
+              </Button>
+              <Button
+                variant="warning"
+                className="rounded-0"
+                onClick={() => setQuantity(prev => prev + 1)}>
+                <FaPlus />
+              </Button>
+            </ButtonGroup>
+            <Button
+              variant="warning"
+              aria-disabled={quantity === 0}
+              disabled={quantity === 0}
+              className="rounded-0 mb-2"
+              onClick={addToBasket}>
+              Add to Basket
+            </Button>
+          </Stack>
         </Card.Body>
       </Stack>
     </Card>
