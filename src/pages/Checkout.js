@@ -94,10 +94,8 @@ function Checkout() {
               </>
             ) : (
               <>
-                <div className="py-3">
-                  <h1 className="d-none d-sm-block h3 mb-2">
-                    Your Amazon Cart is empty.
-                  </h1>
+                <div className="p-3 px-sm-0">
+                  <h1 className="h3 mb-2">Your Amazon Cart is empty.</h1>
                   <p style={{ fontSize: '0.875rem' }} className="mb-0">
                     Your Shopping Cart lives to serve. Give it purpose — fill it
                     with groceries, clothing, household supplies, electronics,
