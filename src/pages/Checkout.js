@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
 import { getBasketTotal } from '../services/reducer';
 import { useStateValue } from '../contexts/StateProvider';
@@ -28,64 +29,87 @@ function Checkout() {
   };
 
   return (
-    <main id="shopping-cart" className="bg-light">
+    <main id="shopping-cart">
       <Container fluid className="p-0 pb-3">
         <Stack className="flex-lg-row-reverse col-lg-12 col-md-10 mx-auto align-items-start">
-          <Subtotal
-            totalPrice={totalPrice}
-            numItems={numItems}
-            className="d-none d-sm-block subtotal-container bg-white p-4 pt-3 mb-4 ms-lg-4"
-          />
-          <div className="cart-items-container bg-white">
-            <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
-            <Button
-              variant="link"
-              style={{ fontSize: '.875rem' }}
-              className="d-none d-sm-block text-decoration-none p-0 mb-0 link-success"
-              onClick={handleSelectProducts}>
-              {notAllSelected ? 'Select' : 'Deselect'} all items
-            </Button>
-            <p
-              style={{ fontSize: '.875rem' }}
-              className="d-none d-sm-block text-secondary text-end mb-0">
-              Price
-            </p>
-            <ListGroup variant="flush" className="border-top border-bottom">
-              {basket.map((product, index) => (
-                <ListGroup.Item
-                  key={product.id}
-                  className="cart-product-container">
-                  <CheckoutProduct
-                    index={index}
-                    id={product.id}
-                    image={product.image}
-                    title={product.title}
-                    price={product.price}
-                    inStock={product.inStock}
-                    quantity={product.quantity}
-                    highlights={product.highlights}
-                    selected={product.selected}
-                    isGift={product.isGift}
-                  />
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-            <CurrencyFormat
-              decimalScale={2}
-              value={totalPrice}
-              displayType="text"
-              thousandSeparator={true}
-              prefix="$"
-              renderText={value => (
-                <p
-                  style={{ fontSize: '1.125rem' }}
-                  className="d-none d-sm-block text-nowrap text-end">
-                  Subtotal ({numItems} item
-                  {numItems === 1 ? '' : 's'}):{' '}
-                  <strong className="fw-semibold">{value}</strong>
-                </p>
-              )}
+          {basket.length > 0 && (
+            <Subtotal
+              totalPrice={totalPrice}
+              numItems={numItems}
+              className="d-none d-sm-block subtotal-container bg-white p-4 pt-3 mb-4 ms-lg-4"
             />
+          )}
+          <div className="cart-items-container bg-white me-auto">
+            {basket.length > 0 ? (
+              <>
+                <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
+                <Button
+                  variant="link"
+                  style={{ fontSize: '.875rem' }}
+                  className="d-none d-sm-block text-decoration-none p-0 mb-0 link-success"
+                  onClick={handleSelectProducts}>
+                  {notAllSelected ? 'Select' : 'Deselect'} all items
+                </Button>
+                <p
+                  style={{ fontSize: '.875rem' }}
+                  className="d-none d-sm-block text-secondary text-end mb-0">
+                  Price
+                </p>
+                <ListGroup variant="flush" className="border-top border-bottom">
+                  {basket.map((product, index) => (
+                    <ListGroup.Item
+                      key={product.id}
+                      className="cart-product-container">
+                      <CheckoutProduct
+                        index={index}
+                        id={product.id}
+                        image={product.image}
+                        title={product.title}
+                        price={product.price}
+                        inStock={product.inStock}
+                        quantity={product.quantity}
+                        highlights={product.highlights}
+                        selected={product.selected}
+                        isGift={product.isGift}
+                      />
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <CurrencyFormat
+                  decimalScale={2}
+                  value={totalPrice}
+                  displayType="text"
+                  thousandSeparator={true}
+                  prefix="$"
+                  renderText={value => (
+                    <p
+                      style={{ fontSize: '1.125rem' }}
+                      className="d-none d-sm-block text-nowrap text-end">
+                      Subtotal ({numItems} item
+                      {numItems === 1 ? '' : 's'}):{' '}
+                      <strong className="fw-semibold">{value}</strong>
+                    </p>
+                  )}
+                />
+              </>
+            ) : (
+              <>
+                <div className="py-3">
+                  <h1 className="d-none d-sm-block h3 mb-2">
+                    Your Amazon Cart is empty.
+                  </h1>
+                  <p style={{ fontSize: '0.875rem' }} className="mb-0">
+                    Your Shopping Cart lives to serve. Give it purpose — fill it
+                    with groceries, clothing, household supplies, electronics,
+                    and more. Continue shopping on the{' '}
+                    <Link to="/" className="text-decoration-none">
+                      Amazon.com homepage
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </Stack>
       </Container>

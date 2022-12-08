@@ -357,6 +357,11 @@
     padding-left: 0.75rem !important;
   }
 
+  .cart-items-container {
+    --offset: calc(300px + 2.5rem);
+    width: calc(100% - var(--offset));
+  }
+
   .subtotal-container {
     width: 300px;
     flex-shrink: 0;
