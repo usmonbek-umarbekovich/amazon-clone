@@ -358,8 +358,8 @@
   }
 
   .cart-items-container {
-    --offset: calc(300px + 2.5rem);
-    width: calc(100% - var(--offset));
+    --offset: calc(300px + 4.75rem);
+    width: calc(100vw - var(--offset));
   }
 
   .subtotal-container {
