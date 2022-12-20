@@ -1,14 +1,25 @@
 import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
-import { useStateValue } from '../contexts/StateProvider';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  basketUpdated,
+  selectAllProducts,
+} from '../features/basket/basketSlice';
+
 import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 function Subtotal({ className, numItems, totalPrice }) {
-  const [{ basket }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const includeGift = useSelector(state => {
+    const products = selectAllProducts(state);
+    return products.some(({ isGift }) => isGift);
+  });
 
   const checkoutBtnContainerRef = useRef();
   const prevScrollTop = useRef(1);
@@ -43,10 +54,7 @@ function Subtotal({ className, numItems, totalPrice }) {
   }, []);
 
   const updateBasketProducts = changes => {
-    dispatch({
-      type: 'UPDATE_BASKET',
-      payload: changes,
-    });
+    dispatch(basketUpdated(changes));
   };
 
   return (
@@ -72,7 +80,7 @@ function Subtotal({ className, numItems, totalPrice }) {
             <Form.Check.Input
               className="border-secondary"
               style={{ marginTop: '.4rem', fontSize: '.8125rem' }}
-              checked={basket.some(p => p.isGift)}
+              checked={includeGift}
               onChange={e => updateBasketProducts({ isGift: e.target.checked })}
             />
             <Form.Check.Label style={{ fontSize: '.875rem' }}>
@@ -139,7 +147,7 @@ function Subtotal({ className, numItems, totalPrice }) {
           <Form.Check.Input
             style={{ fontSize: '1.5rem' }}
             className="m-0 me-2"
-            checked={basket.some(p => p.isGift)}
+            checked={includeGift}
             onChange={e => updateBasketProducts({ isGift: e.target.checked })}
           />
           <Form.Check.Label style={{ fontSize: '.9375rem' }}>

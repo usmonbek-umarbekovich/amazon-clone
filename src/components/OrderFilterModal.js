@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { periods } from '../services/reducer';
+import { PERIODS } from '../config/constants';
+
 import FormCheck from 'react-bootstrap/FormCheck';
 import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -129,7 +130,7 @@ function OrderFilterModal({
             Filter by order date
           </p>
           <ListGroup variant="flush" className="border-top border-bottom">
-            {periods.slice(0, periods.length - 1).map((p, idx) => (
+            {PERIODS.slice(0, PERIODS.length - 1).map((p, idx) => (
               <ListGroup.Item key={idx} className="py-3">
                 <FormCheck id={`order-date-idx-${idx}`}>
                   <FormCheck.Input
@@ -147,15 +148,15 @@ function OrderFilterModal({
 
             {haveArchive && (
               <ListGroup.Item className="py-3">
-                <FormCheck id={`order-date-idx-${periods.length - 1}`}>
+                <FormCheck id={`order-date-idx-${PERIODS.length - 1}`}>
                   <FormCheck.Input
                     type="radio"
                     name="order-date"
                     className="fs-1"
                     style={{ margin: '0.125rem 1rem 0 -1.275rem' }}
-                    checked={orderDateIndex === periods.length - 1}
+                    checked={orderDateIndex === PERIODS.length - 1}
                     onChange={e =>
-                      e.target.checked && setOrderDateIndex(periods.length - 1)
+                      e.target.checked && setOrderDateIndex(PERIODS.length - 1)
                     }
                   />
                   <FormCheck.Label className="fs-5">

@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { auth } from '../config';
-import { useStateValue } from '../contexts/StateProvider';
+import { auth } from '../config/firebase';
+
+import { useSelector } from 'react-redux';
+import { selectTotalQuantity } from '../features/basket/basketSlice';
+import { useUserContext } from '../contexts/UserProvider';
+
 import Container from 'react-bootstrap/Container';
 import Stack from 'react-bootstrap/Stack';
 import Navbar from 'react-bootstrap/Navbar';
@@ -11,6 +15,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+
 import { FaBars, FaRegUser, FaSearch } from 'react-icons/fa';
 import {
   MdClose,
@@ -19,10 +24,10 @@ import {
 } from 'react-icons/md';
 
 function Header() {
-  const [{ basket, user }] = useStateValue();
-  const [showUserLinks, setShowUserLinks] = useState(false);
+  const user = useUserContext();
+  const numItems = useSelector(selectTotalQuantity);
 
-  const numItems = basket.reduce((prev, curr) => prev + curr.quantity, 0);
+  const [showUserLinks, setShowUserLinks] = useState(false);
 
   return (
     <header>

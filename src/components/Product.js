@@ -1,6 +1,9 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useStateValue } from '../contexts/StateProvider';
+
+import { useDispatch } from 'react-redux';
+import { productAdded } from '../features/basket/basketSlice';
+
 import Stack from 'react-bootstrap/Stack';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -17,10 +20,12 @@ function Product({
   image,
   highlights,
 }) {
+  const dispatch = useDispatch();
+
   const [imageHeight, setImageHeight] = useState('100%');
   const [quantity, setQuantity] = useState(0);
+
   const productInfoRef = useRef();
-  const dispatch = useStateValue()[1];
 
   useEffect(() => {
     if (!productInfoRef.current) return;
@@ -43,9 +48,8 @@ function Product({
   }, []);
 
   const addToBasket = () => {
-    dispatch({
-      type: 'ADD_TO_BASKET',
-      payload: {
+    dispatch(
+      productAdded({
         id,
         inStock,
         price,
@@ -55,8 +59,8 @@ function Product({
         highlights,
         selected: true,
         isGift: false,
-      },
-    });
+      })
+    );
     setQuantity(0);
   };
 

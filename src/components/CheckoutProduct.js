@@ -1,4 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  productRemoved,
+  productUpdated,
+  selectProductById,
+} from '../features/basket/basketSlice';
+
 import Stack from 'react-bootstrap/Stack';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
@@ -6,27 +13,26 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { useStateValue } from '../contexts/StateProvider';
 import { MdDeleteOutline } from 'react-icons/md';
 
-function CheckoutProduct({
-  id,
-  index,
-  image,
-  title,
-  price,
-  inStock,
-  quantity,
-  selected,
-  isGift,
-  highlights,
-}) {
+function CheckoutProduct({ id }) {
+  const dispatch = useDispatch();
+  const {
+    image,
+    title,
+    price,
+    inStock,
+    quantity,
+    selected,
+    isGift,
+    highlights,
+  } = useSelector(state => selectProductById(state, id));
+
   const [showModal, setShowModal] = useState(false);
   const [isInput, setIsInput] = useState(false);
   const [isInputSubmitted, setIsInputSubmitted] = useState(true);
   const [inputQuantity, setInputQuantity] = useState('1');
   const inputQuantityRef = useRef();
-  const dispatch = useStateValue()[1];
 
   useEffect(() => {
     if (!isInput || !inputQuantityRef.current) return;
@@ -35,17 +41,11 @@ function CheckoutProduct({
   }, [isInput]);
 
   const removeFromBasket = () => {
-    dispatch({
-      type: 'REMOVE_FROM_BASKET',
-      payload: { id, index },
-    });
+    dispatch(productRemoved(id));
   };
 
   const updateProduct = changes => {
-    dispatch({
-      type: 'UPDATE_BASKET_PRODUCT',
-      payload: { id, changes },
-    });
+    dispatch(productUpdated({ id, changes }));
   };
 
   const handleQuantitySubmit = e => {

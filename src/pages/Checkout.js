@@ -1,8 +1,16 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
-import { getBasketTotal } from '../services/reducer';
-import { useStateValue } from '../contexts/StateProvider';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  basketUpdated,
+  selectAllProducts,
+  selectProductIds,
+  selectTotalPrice,
+  selectTotalQuantity,
+} from '../features/basket/basketSlice';
+
 import Subtotal from '../components/Subtotal';
 import CheckoutProduct from '../components/CheckoutProduct';
 import Container from 'react-bootstrap/Container';
@@ -11,28 +19,30 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 
 function Checkout() {
-  const [{ basket }, dispatch] = useStateValue();
-  const notAllSelected = basket.some(p => !p.selected);
+  const dispatch = useDispatch();
 
-  const totalPrice = getBasketTotal(basket);
-  const numItems = basket.reduce((prev, curr) => prev + curr.quantity, 0);
+  const productIds = useSelector(selectProductIds);
+  const totalPrice = useSelector(selectTotalPrice);
+  const numItems = useSelector(selectTotalQuantity);
+
+  const isAllSelected = useSelector(state => {
+    const products = selectAllProducts(state);
+    return products.every(({ selected }) => selected);
+  });
 
   useEffect(() => {
     document.title = 'Amazon.com Shopping Cart';
   }, []);
 
   const handleSelectProducts = () => {
-    dispatch({
-      type: 'UPDATE_BASKET',
-      payload: { selected: notAllSelected },
-    });
+    dispatch(basketUpdated({ selected: !isAllSelected }));
   };
 
   return (
     <main id="shopping-cart">
       <Container fluid className="p-0 pb-3">
         <Stack className="flex-lg-row-reverse col-lg-12 col-md-10 mx-auto align-items-start">
-          {basket.length > 0 && (
+          {numItems > 0 && (
             <Subtotal
               totalPrice={totalPrice}
               numItems={numItems}
@@ -40,7 +50,7 @@ function Checkout() {
             />
           )}
           <div className="cart-items-container bg-white me-auto">
-            {basket.length > 0 ? (
+            {numItems > 0 ? (
               <>
                 <h1 className="d-none d-sm-block h3 mb-0">Shopping Cart</h1>
                 <Button
@@ -48,7 +58,7 @@ function Checkout() {
                   style={{ fontSize: '.875rem' }}
                   className="d-none d-sm-block text-decoration-none p-0 mb-0 link-success"
                   onClick={handleSelectProducts}>
-                  {notAllSelected ? 'Select' : 'Deselect'} all items
+                  {isAllSelected ? 'Deselect' : 'Select'} all items
                 </Button>
                 <p
                   style={{ fontSize: '.875rem' }}
@@ -56,22 +66,9 @@ function Checkout() {
                   Price
                 </p>
                 <ListGroup variant="flush" className="border-top border-bottom">
-                  {basket.map((product, index) => (
-                    <ListGroup.Item
-                      key={product.id}
-                      className="cart-product-container">
-                      <CheckoutProduct
-                        index={index}
-                        id={product.id}
-                        image={product.image}
-                        title={product.title}
-                        price={product.price}
-                        inStock={product.inStock}
-                        quantity={product.quantity}
-                        highlights={product.highlights}
-                        selected={product.selected}
-                        isGift={product.isGift}
-                      />
+                  {productIds.map(id => (
+                    <ListGroup.Item key={id} className="cart-product-container">
+                      <CheckoutProduct id={id} />
                     </ListGroup.Item>
                   ))}
                 </ListGroup>

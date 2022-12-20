@@ -1,12 +1,14 @@
-import moment from 'moment';
+import { Link } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
+import moment from 'moment';
+
 import OrderProduct from './OrderProduct';
 import Popup from './Popup';
+
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
 
 function Order({ order }) {
   // TODO remove dummy data

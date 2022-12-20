@@ -1,10 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { useStateValue } from '../contexts/StateProvider';
-import { periods } from '../services/reducer';
-import { db } from '../config';
+import { useUserContext } from '../contexts/UserProvider';
+
+import { PERIODS } from '../config/constants';
+import { db } from '../config/firebase';
+
 import Order from '../components/Order';
 import OrderFilterModal from '../components/OrderFilterModal';
+
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -13,7 +16,8 @@ import Button from 'react-bootstrap/Button';
 import { FaSearch, FaChevronRight } from 'react-icons/fa';
 
 function Orders() {
-  const [{ user }] = useStateValue();
+  const user = useUserContext();
+
   const [orders, setOrders] = useState([]);
   const [activeNavKey, setActiveNavKey] = useState('orders');
   const [periodIndex, setPeriodIndex] = useState(1);
@@ -25,14 +29,14 @@ function Orders() {
   );
 
   const selectedOrders = useMemo(() => {
-    if (periods[periodIndex].name === 'year') {
+    if (PERIODS[periodIndex].name === 'year') {
       return orders.filter(order => {
         const date = new Date(order.data.created * 1000);
-        return date.getFullYear() === periods[periodIndex].value;
+        return date.getFullYear() === PERIODS[periodIndex].value;
       });
     }
 
-    if (periods[periodIndex].name === 'month') {
+    if (PERIODS[periodIndex].name === 'month') {
       return orders.filter(order => {
         const date = new Date(order.data.created * 1000);
         const curr = new Date();
@@ -42,7 +46,7 @@ function Orders() {
       });
     }
 
-    if (periods[periodIndex].name === 'day') {
+    if (PERIODS[periodIndex].name === 'day') {
       return orders.filter(order => {
         const date = new Date(order.data.created * 1000);
         const curr = new Date();
@@ -52,7 +56,7 @@ function Orders() {
       });
     }
 
-    if (periods[periodIndex].name === 'archive') {
+    if (PERIODS[periodIndex].name === 'archive') {
       return orders.filter(order => order.archived);
     }
 
@@ -243,7 +247,7 @@ function Orders() {
           <section id="orders-period-section" className="mb-sm-3 order-2">
             <div className="d-sm-none">
               <p className="text-secondary text-center fw-bold my-1">
-                {periods[periodIndex].label}
+                {PERIODS[periodIndex].label}
               </p>
             </div>
 
@@ -266,10 +270,10 @@ function Orders() {
                     boxShadow: '0 2px 5px 0 rgb(213 217 217 / 50%)',
                   }}
                   className="rounded-2 border-secondary border-opacity-25 text-dark">
-                  {periods[periodIndex].label}
+                  {PERIODS[periodIndex].label}
                 </Dropdown.Toggle>
                 <Dropdown.Menu className="cart-product-quantity-menu">
-                  {periods.slice(0, periods.length - 1).map((p, idx) => (
+                  {PERIODS.slice(0, PERIODS.length - 1).map((p, idx) => (
                     <Dropdown.Item
                       key={idx}
                       eventKey={idx}
@@ -280,9 +284,9 @@ function Orders() {
                   ))}
                   {haveArchive && (
                     <Dropdown.Item
-                      eventKey={periods.length - 1}
-                      active={periodIndex === periods.length - 1}
-                      onClick={() => setPeriodIndex(periods.length - 1)}>
+                      eventKey={PERIODS.length - 1}
+                      active={periodIndex === PERIODS.length - 1}
+                      onClick={() => setPeriodIndex(PERIODS.length - 1)}>
                       Archived orders
                     </Dropdown.Item>
                   )}
@@ -304,16 +308,16 @@ function Orders() {
                 style={{ fontSize: '0.875rem' }}
                 className="text-center pt-sm-3 px-2 py-5">
                 <span>
-                  You have not placed any orders in {periods[periodIndex].label}
+                  You have not placed any orders in {PERIODS[periodIndex].label}
                   .
                 </span>{' '}
-                {(periodIndex < periods.length - 2 ||
-                  (periodIndex === periods.length - 2 && haveArchive)) && (
+                {(periodIndex < PERIODS.length - 2 ||
+                  (periodIndex === PERIODS.length - 2 && haveArchive)) && (
                   <Button
                     variant="link"
                     className="text-decoration-none p-0 pb-1"
                     onClick={() => setPeriodIndex(periodIndex + 1)}>
-                    View orders in {periods[periodIndex + 1].label}
+                    View orders in {PERIODS[periodIndex + 1].label}
                   </Button>
                 )}
               </div>
@@ -375,9 +379,9 @@ function Orders() {
               className="text-center pt-sm-3 px-2 py-5">
               <span>
                 We aren't finding any cancelled orders (for orders placed in{' '}
-                {periods[periodIndex].label.startsWith('last')
-                  ? `the ${periods[periodIndex].label}`
-                  : periods[periodIndex].label}
+                {PERIODS[periodIndex].label.startsWith('last')
+                  ? `the ${PERIODS[periodIndex].label}`
+                  : PERIODS[periodIndex].label}
                 ).
               </span>{' '}
               <Button

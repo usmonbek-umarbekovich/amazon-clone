@@ -1,19 +1,31 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import CurrencyFormat from 'react-currency-format';
+
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { doc, setDoc } from 'firebase/firestore';
-import CurrencyFormat from 'react-currency-format';
-import CheckoutProduct from '../components/CheckoutProduct';
-import { useStateValue } from '../contexts/StateProvider';
-import { getBasketTotal } from '../services/reducer';
+import { db } from '../config/firebase';
 import axios from '../services/axios';
-import { db } from '../config';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  basketCleaned,
+  selectTotalPrice,
+  selectAllProducts,
+} from '../features/basket/basketSlice';
+import { useUserContext } from '../contexts/UserProvider';
+
+import CheckoutProduct from '../components/CheckoutProduct';
 import './style.css';
 
 function Payment() {
-  const [{ basket, user }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
+  const products = useSelector(selectAllProducts);
+  const totalPrice = useSelector(selectTotalPrice);
 
   const navigate = useNavigate();
+
+  const user = useUserContext();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -28,13 +40,13 @@ function Payment() {
       const response = await axios({
         method: 'post',
         url: '/payments/create',
-        params: { total: getBasketTotal(basket) * 100 },
+        params: { total: totalPrice * 100 },
       });
       setClientSecret(response.data.clientSecret);
     };
 
     getClientSecret();
-  }, [basket]);
+  }, [totalPrice]);
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -50,7 +62,7 @@ function Payment() {
       if (user) {
         const orderRef = doc(db, 'users', user.uid, 'orders', paymentIntent.id);
         await setDoc(orderRef, {
-          basket,
+          basket: products,
           amount: paymentIntent.amount,
           created: paymentIntent.created,
         });
@@ -58,7 +70,7 @@ function Payment() {
 
       setSucceeded(true);
       setError('');
-      dispatch({ type: 'EMPTY_BASKET' });
+      dispatch(basketCleaned());
       navigate('/orders', { replace: true });
     } catch (err) {
       console.log(err);
@@ -77,7 +89,7 @@ function Payment() {
         <h1>
           Checkout (
           <Link to="/checkout">
-            {basket?.length ?? 0} item{basket?.length ? 's' : ''}
+            {products.length ?? 0} item{products.length ? 's' : ''}
           </Link>
           )
         </h1>
@@ -97,20 +109,8 @@ function Payment() {
             <h3>Review items and delivery</h3>
           </div>
           <div className="payment__items">
-            {basket.map((product, index) => (
-              <CheckoutProduct
-                index={index}
-                key={product.id}
-                id={product.id}
-                image={product.image}
-                title={product.title}
-                price={product.price}
-                inStock={product.inStock}
-                quantity={product.quantity}
-                highlights={product.highlights}
-                selected={product.selected}
-                isGift={product.isGift}
-              />
+            {products.map(({ id }) => (
+              <CheckoutProduct key={id} id={id} />
             ))}
           </div>
         </div>
@@ -126,7 +126,7 @@ function Payment() {
                 <CurrencyFormat
                   renderText={value => <h3>Order Total: {value}</h3>}
                   decimalScale={2}
-                  value={getBasketTotal(basket)}
+                  value={totalPrice}
                   displayType="text"
                   thousandSeperator={true}
                   prefix="$"
