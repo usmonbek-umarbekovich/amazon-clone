@@ -4,22 +4,22 @@ import CurrencyFormat from 'react-currency-format';
 import classNames from 'classnames';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { db } from '../config/firebase';
+import { db } from '../../config/firebase';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useUserContext } from '../contexts/UserProvider';
+import { useUserContext } from '../../contexts/UserProvider';
 
 import {
   selectTotalPrice,
   selectAllProducts,
-} from '../features/basket/basketSlice';
+} from '../../features/basket/basketSlice';
 
 import {
   makePayment,
   fetchClientSecret,
-} from '../features/payment/paymentSlice';
+} from '../../features/payment/paymentSlice';
 
-import CheckoutProduct from '../components/CheckoutProduct';
+import CheckoutProduct from '../../components/Checkout/CheckoutProduct';
 import './style.css';
 
 function Payment() {

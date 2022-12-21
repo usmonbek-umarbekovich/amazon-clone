@@ -3,7 +3,9 @@ import classNames from 'classnames';
 
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
+
 import { FaChevronDown } from 'react-icons/fa';
+import './style.css';
 
 const PopupContext = createContext();
 

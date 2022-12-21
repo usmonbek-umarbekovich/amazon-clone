@@ -2,13 +2,15 @@ import { useMemo, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { productAdded } from '../features/basket/basketSlice';
+import { productAdded } from '../../features/basket/basketSlice';
 
 import Stack from 'react-bootstrap/Stack';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+
 import { FaStar, FaStarHalfAlt, FaMinus, FaPlus } from 'react-icons/fa';
+import './style.css';
 
 function Product({
   id,

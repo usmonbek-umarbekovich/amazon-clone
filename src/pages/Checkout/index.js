@@ -9,14 +9,16 @@ import {
   selectProductIds,
   selectTotalPrice,
   selectTotalQuantity,
-} from '../features/basket/basketSlice';
+} from '../../features/basket/basketSlice';
 
-import Subtotal from '../components/Subtotal';
-import CheckoutProduct from '../components/CheckoutProduct';
 import Container from 'react-bootstrap/Container';
 import Stack from 'react-bootstrap/Stack';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+
+import CheckoutProduct from '../../components/Checkout/CheckoutProduct';
+import Subtotal from '../../components/Checkout/Subtotal';
+import './style.css';
 
 function Checkout() {
   const dispatch = useDispatch();

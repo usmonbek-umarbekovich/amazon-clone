@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { PERIODS } from '../config/constants';
+import { PERIODS } from '../../config/constants';
 
 import FormCheck from 'react-bootstrap/FormCheck';
 import Modal from 'react-bootstrap/Modal';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+
 import { FaChevronLeft } from 'react-icons/fa';
+import './style.css';
 
 function OrderFilterModal({
   show,

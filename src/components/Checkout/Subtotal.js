@@ -1,16 +1,17 @@
 import { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
-import { useDispatch, useSelector } from 'react-redux';
 import {
   basketUpdated,
   selectAllProducts,
-} from '../features/basket/basketSlice';
+} from '../../features/basket/basketSlice';
 
 import Stack from 'react-bootstrap/Stack';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import './style.css';
 
 function Subtotal({ className, numItems, totalPrice }) {
   const dispatch = useDispatch();

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import ProductList from '../components/ProductList';
+import ProductList from '../../components/Products/ProductList';
 import './style.css';
 
 function Home() {

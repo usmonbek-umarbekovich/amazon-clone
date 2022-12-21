@@ -73,3 +73,23 @@ code {
 .lines-3 {
   --max-lines: 3;
 }
+
+.btn-container {
+  margin: 0 0.625rem 0.5rem 0;
+  padding: 0.5rem 0.75rem 0.4375rem 0.8125rem;
+  background: #fff;
+  border: 1px solid #d5d9d9;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.2rem 0.5rem 0 rgb(213 217 217 / 50%);
+}
+
+.btn-separator {
+  width: 0.0625rem;
+  height: 0.75rem;
+  margin: 0 0.75rem;
+}
+
+.btn-link {
+  font-size: inherit !important;
+  line-height: 1;
+}

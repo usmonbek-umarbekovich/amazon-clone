@@ -1,0 +1,36 @@
+.popup-body {
+  font-size: 0.875rem;
+  margin-top: -0.15rem;
+  min-width: 15rem;
+  z-index: 900;
+  --icon-left: 50%;
+}
+
+.popup-body::before {
+  content: '';
+  position: absolute;
+  top: -0.425rem;
+  left: var(--icon-left);
+  transform: translateX(-50%) rotate(45deg);
+
+  width: 0.8rem;
+  height: 0.8rem;
+  background-color: #fff;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+  border-right: none;
+  border-bottom: none;
+}
+
+.popup-body .btn-close-container {
+  font-size: 0.75rem;
+  margin-top: -0.45rem;
+  margin-left: 0.35rem;
+}
+
+.popup-toggle {
+  margin-top: -0.35rem;
+}
+
+.popup-toggle-icon {
+  font-size: 0.5rem;
+}

@@ -1,19 +1,21 @@
 import { useEffect, useState, useMemo } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { useUserContext } from '../contexts/UserProvider';
+import { useUserContext } from '../../contexts/UserProvider';
 
-import { PERIODS } from '../config/constants';
-import { db } from '../config/firebase';
+import { PERIODS } from '../../config/constants';
+import { db } from '../../config/firebase';
 
-import Order from '../components/Order';
-import OrderFilterModal from '../components/OrderFilterModal';
+import Order from '../../components/Orders/Order';
+import OrderFilterModal from '../../components/Orders/OrderFilterModal';
 
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Button from 'react-bootstrap/Button';
+
 import { FaSearch, FaChevronRight } from 'react-icons/fa';
+import './style.css';
 
 function Orders() {
   const user = useUserContext();

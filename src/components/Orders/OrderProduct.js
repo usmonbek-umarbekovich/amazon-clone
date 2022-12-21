@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+
 import { BsArrowRepeat, BsHandbag, BsChevronRight } from 'react-icons/bs';
+import './style.css';
 
 function OrderProduct({ id, title, image, returnBy, deliveryDate }) {
   returnBy = 'October 23, 2022';

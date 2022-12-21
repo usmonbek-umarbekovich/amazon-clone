@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
   productRemoved,
   productUpdated,
   selectProductById,
-} from '../features/basket/basketSlice';
+} from '../../features/basket/basketSlice';
 
 import Stack from 'react-bootstrap/Stack';
 import Modal from 'react-bootstrap/Modal';
@@ -13,7 +14,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import ListGroup from 'react-bootstrap/ListGroup';
+
 import { MdDeleteOutline } from 'react-icons/md';
+import './style.css';
 
 function CheckoutProduct({ id }) {
   const dispatch = useDispatch();
@@ -96,7 +99,7 @@ function CheckoutProduct({ id }) {
         </div>
 
         {/* Product info */}
-        <div id="cart-product-info-container" className="ps-2 flex-grow-1">
+        <div className="cart-product-info-container ps-2 flex-grow-1">
           <Stack className="flex-sm-row align-items-start justify-content-between">
             <p className="cart-product-title lh-sm mb-1 truncate-lines lines-2">
               {title}
@@ -151,8 +154,7 @@ function CheckoutProduct({ id }) {
 
           {/* Control buttons on large screens */}
           <div
-            id="cart-control-sm-container"
-            className="d-none d-sm-flex align-items-center"
+            className="d-none d-sm-flex cart-control-sm-container align-items-center"
             style={{ fontSize: '.75rem' }}>
             {isInput ? (
               <Form
@@ -258,8 +260,7 @@ function CheckoutProduct({ id }) {
 
       {/* Control buttons on small screens */}
       <div
-        id="cart-control-container"
-        className="d-sm-none"
+        className="d-sm-none cart-control-container"
         style={{ fontSize: '.75rem' }}>
         {isInput ? (
           <Form
