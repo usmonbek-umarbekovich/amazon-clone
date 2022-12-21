@@ -1,87 +1,86 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CurrencyFormat from 'react-currency-format';
+import classNames from 'classnames';
 
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import axios from '../services/axios';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { useUserContext } from '../contexts/UserProvider';
+
 import {
-  basketCleaned,
   selectTotalPrice,
   selectAllProducts,
 } from '../features/basket/basketSlice';
-import { useUserContext } from '../contexts/UserProvider';
+
+import {
+  makePayment,
+  fetchClientSecret,
+} from '../features/payment/paymentSlice';
 
 import CheckoutProduct from '../components/CheckoutProduct';
 import './style.css';
 
 function Payment() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const products = useSelector(selectAllProducts);
   const totalPrice = useSelector(selectTotalPrice);
 
-  const navigate = useNavigate();
+  const paymentError = useSelector(state => state.payment.error);
+  const paymentStatus = useSelector(state => state.payment.status);
+  const clientSecret = useSelector(state => state.payment.clientSecret);
 
   const user = useUserContext();
   const stripe = useStripe();
   const elements = useElements();
 
-  const [processing, setProcessing] = useState(false);
-  const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState('');
-  const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    const getClientSecret = async () => {
-      const response = await axios({
-        method: 'post',
-        url: '/payments/create',
-        params: { total: totalPrice * 100 },
-      });
-      setClientSecret(response.data.clientSecret);
-    };
+    if (!totalPrice) return;
+    dispatch(fetchClientSecret(totalPrice));
+  }, [dispatch, totalPrice]);
 
-    getClientSecret();
-  }, [totalPrice]);
+  useEffect(() => {
+    if (paymentError) console.log(paymentError);
+  }, [paymentError]);
+
+  useEffect(() => {
+    if (paymentStatus !== 'fulfilled') return;
+    navigate('/orders', { replace: true });
+  }, [navigate, paymentStatus]);
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (paymentStatus !== 'idle') return;
 
-    setProcessing(true);
-    try {
-      const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      });
-
-      if (user) {
-        const orderRef = doc(db, 'users', user.uid, 'orders', paymentIntent.id);
-        await setDoc(orderRef, {
-          basket: products,
-          amount: paymentIntent.amount,
-          created: paymentIntent.created,
-        });
-      }
-
-      setSucceeded(true);
-      setError('');
-      dispatch(basketCleaned());
-      navigate('/orders', { replace: true });
-    } catch (err) {
-      console.log(err);
-    }
-    setProcessing(false);
+    dispatch(
+      makePayment({
+        db,
+        user,
+        stripe,
+        elements,
+        CardElement,
+        clientSecret,
+        basket: products,
+      })
+    );
   };
 
   const handleChange = e => {
-    setDisabled(e.empty);
-    setError(e.error ? e.error.message : '');
+    setIsComplete(e.complete);
+    if (e.error) setError(e.error.message);
   };
+
+  const isButtonDisabled =
+    error !== '' ||
+    isComplete === false ||
+    paymentStatus === 'pending' ||
+    paymentStatus === 'fulfilled';
 
   return (
     <div className="payment">
@@ -131,8 +130,12 @@ function Payment() {
                   thousandSeperator={true}
                   prefix="$"
                 />
-                <button disabled={processing || disabled || succeeded}>
-                  <span>{processing ? 'Processing' : 'Buy Now'}</span>
+                <button
+                  disabled={isButtonDisabled}
+                  className={classNames({ 'opacity-75': isButtonDisabled })}>
+                  <span>
+                    {paymentStatus === 'pending' ? 'Processing' : 'Buy Now'}
+                  </span>
                 </button>
               </div>
 
